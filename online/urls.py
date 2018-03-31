@@ -7,6 +7,9 @@ urlpatterns = [
     # 登陆界面
     url(r'^$',                            offical.login,
         name='login'),
+    # 登陆界面
+    url(r'^editpassword/$',               offical.editpassword,
+        name='editpassword'),
     # 注销
     url(r'^logout/$',                     offical.logout,
         name='logout'),

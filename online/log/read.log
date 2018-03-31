@@ -537,3 +537,10 @@
 {"time": "2018-03-31 03:34:15.634309", "user": "guxiang", "ip": "127.0.0.1", "how": "ajax_table_data", "what": "key_table=招标"}
 {"time": "2018-03-31 03:34:15.641997", "user": "guxiang", "ip": "127.0.0.1", "how": "ajax_tree_data", "what": "key_tree=立项"}
 {"time": "2018-03-31 03:34:17.654720", "user": "guxiang", "ip": "127.0.0.1", "how": "get_WritePermissionObj", "what": ""}
+{"time": "2018-03-31 07:52:09.655817", "user": "guxiang", "ip": "127.0.0.1", "how": "ajax_treeTable", "what": ""}
+{"time": "2018-03-31 07:52:52.400547", "user": "guxiang", "ip": "127.0.0.1", "how": "ajax_treeTable", "what": ""}
+{"time": "2018-03-31 07:52:53.515779", "user": "guxiang", "ip": "127.0.0.1", "how": "get_Pie_Data", "what": "UDID=1"}
+{"time": "2018-03-31 07:52:54.216016", "user": "guxiang", "ip": "127.0.0.1", "how": "get_Pie_Data", "what": "UDID=2"}
+{"time": "2018-03-31 07:52:54.965264", "user": "guxiang", "ip": "127.0.0.1", "how": "get_Pie_Data", "what": "UDID=3"}
+{"time": "2018-03-31 07:52:55.443060", "user": "guxiang", "ip": "127.0.0.1", "how": "get_Pie_Data", "what": "UDID=4"}
+{"time": "2018-03-31 07:52:56.163801", "user": "guxiang", "ip": "127.0.0.1", "how": "get_Pie_Data", "what": "UDID=5"}

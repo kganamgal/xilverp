@@ -43,6 +43,15 @@ class UserForm(forms.Form):
     password = forms.CharField(
         label='密　码', max_length=50, widget=forms.PasswordInput())
 
+class UserFormEditPassword(forms.Form):
+    username  = forms.CharField(label='用 户 名', max_length=50)
+    passwordo = forms.CharField(
+         label='原 密 码', max_length=50, widget=forms.PasswordInput())
+    password1 = forms.CharField(
+         label='新 密 码', max_length=50, widget=forms.PasswordInput())
+    password2 = forms.CharField(
+         label='新 密 码', max_length=50, widget=forms.PasswordInput())
+
 # --------------------页面--------------------
 dict_Eng_Chn = {'Company':     '单位',
                 'Init':        '立项',
@@ -74,7 +83,7 @@ def login(request):
                 request.session['username'] = username
                 request.session.set_expiry(0)
                 # 比较成功，跳转至URL: overview
-                logUserOperation(request, 'login_out',
+                logUserOperation(request, 'login_in',
                                  sys._getframe().f_code.co_name)
                 response = HttpResponseRedirect(reverse('overview'))
                 return response
@@ -86,6 +95,55 @@ def login(request):
     else:
         uf = UserForm()
     return render(request, 'login.html', {'uf': uf})
+
+def editpassword(request):
+    '''
+        To edit password.
+    '''
+    if request.method == 'POST':
+        uf = UserFormEditPassword(request.POST)
+        if uf.is_valid():
+            # 获取表单用户密码
+            username = uf.cleaned_data['username']
+            passwordo = uf.cleaned_data['passwordo']
+            password1 = uf.cleaned_data['password1']
+            password2 = uf.cleaned_data['password2']
+            # 合法性检查
+            if len(passwordo) == 0:
+                Cnt = '请输入原密码<br/>'
+                Cnt += '<a href="/online/editpassword">修改密码<a>'
+                return HttpResponse(Cnt)
+            elif len(password1) == 0:
+                Cnt = '请输入新密码<br/>'
+                Cnt += '<a href="/online/editpassword">修改密码<a>'
+                return HttpResponse(Cnt)
+            elif len(password2) == 0:
+                Cnt = '请输入新密码<br/>'
+                Cnt += '<a href="/online/editpassword">修改密码<a>'
+                return HttpResponse(Cnt)
+            elif password1 != password2:
+                Cnt = '请输入两次相同的新密码<br/>'
+                Cnt += '<a href="/online/editpassword">修改密码<a>'
+                return HttpResponse(Cnt)
+            # HASH化密码
+            passwordo_hash = hash_sha256(passwordo)
+            password1_hash = hash_sha256(password1)
+            password2_hash = hash_sha256(password2)
+            # 获取的表单数据与数据库进行比较
+            user = table_User.objects.filter(
+                用户名__exact=username, 密码__exact=passwordo_hash)
+            if user:
+                # 比较成功，写入新密码，跳转回登陆页
+                user.update(**{'密码': password1_hash})
+                return render(request, 'login.html', {'uf': UserForm(request.POST)})
+            else:
+                # 比较失败，返回原页面
+                Cnt = '用户名不存在，或密码输入错误<br/>'
+                Cnt += '<a href="/online/editpassword">修改密码<a>'
+                return HttpResponse(Cnt)
+    else:
+        uf = UserFormEditPassword()
+    return render(request, 'editpassword.html', {'uf': uf})
 
 
 def logout(request):

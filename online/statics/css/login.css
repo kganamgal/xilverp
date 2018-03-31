@@ -6,12 +6,12 @@
 */
 body
 {
-	background-image: url(/statics/images/log_in_bgp.jpg);
+	/*background-image: url(/statics/images/log_in_bgp.jpg);*/
 }
 div
 {
 	/*background-color: silver; filter: alpha(Opacity=20); -moz-opacity: 0.6; opacity: 0.6;*/
-	width: 300px;
+	width: 400px;
 	margin-left: auto;
 	margin-right: 50px;
 	padding-top: 110px;
@@ -20,10 +20,10 @@ div
 
 input
 {
-	width: 200px;
+	width: 300px;
 }
 
 input.submit
 {
-	width: 260px;
+	width: 360px;
 }
