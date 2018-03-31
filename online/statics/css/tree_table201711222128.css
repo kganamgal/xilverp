@@ -1,0 +1,44 @@
+/*
+* @Author: Administrator
+* @Date:   2017-11-14 09:09:23
+* @Last Modified by:   Administrator
+* @Last Modified time: 2017-11-21 11:36:21
+*/
+
+/* Border styles */
+/*表单群*/
+
+.tree_table ul, li
+{
+	list-style: none;
+	font-size: 13px;
+	font-family: Verdana;
+	cursor: default;
+}
+.onClick
+{
+	background: rgb(120, 211, 210);
+}
+
+.tree_table_content
+{
+	font-size: 12px;
+	font-family: Verdana;
+	cursor: default;
+}
+
+.tree_table_content td
+{
+	min-width: 100px;
+	max-width: 100px;
+	white-space: nowrap;
+	text-overflow: ellipsis;
+	overflow: hidden;
+	text-align: right;
+}
+
+.tree_table_content
+{
+	border-collapse: collapse; 
+	border-spacing: 0px;
+}

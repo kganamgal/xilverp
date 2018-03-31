@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body>
+	<div id="id_chart" style="height: 500px;"></div>
+
+  <!-- Jquery组件引用 -->
+  <!-- <script src="/statics/js/jquery.min.js"></script> -->
+  <!-- echarts -->
+  <!-- <script type="text/javascript" src="/statics/js/echarts.min.js"></script> -->
+  <!-- edwin常用函数集合 -->
+  <!-- <link rel="stylesheet" href="/statics/css/online_20180105.css"> -->
+  <script type="text/javascript" src="/statics/js/online_20180105.js"></script>
+  <script type="text/javascript" src="/statics/js/often_by_Edwin_201712182301.js"></script>
+
+  <script type="text/javascript">
+    var _data;
+    $(main);
+
+    function main() {
+      // 将父窗口的数据引入
+      var _data = parent.child_data['chart_data'];
+
+      // 根据数据构造图表
+      makeBigChart('id_chart', _data);
+    }
+
+    function makeBigChart(div_id, data) {
+      chart_data = data.mySeries;
+      chart_title = data.myTitle;
+      chart_subTitle = data.mySubTitle;
+      item_describe = data.myDescribe;
+      // 求和
+      var sum_value = 0;
+      for (i in data.mySeries) {
+        sum_value = accAdd(sum_value, data.mySeries[i].value);
+      }
+      var legendData = []; // 图例名
+      var legendItem = {}; // 图例占比
+      for (i in data.mySeries) {
+        var percenter = '';
+        if (sum_value > 0) {
+          percenter = accDiv(data.mySeries[i].value, sum_value / 100).toFixed(2) + '\%';
+        }
+        legendItem[data.mySeries[i].name] = percenter;
+        legendData.push(data.mySeries[i].name);
+      }
+      // 初始化图表
+      var myChart = echarts.init(document.getElementById(div_id));
+      option = {
+        title: {
+          text: chart_title,
+          subtext: chart_subTitle,
+          left: 'center',
+        },
+        legend: {
+          type: 'scroll',
+          orient: 'vertical',
+          right: 10,
+          top: 20,
+          bottom: 20,
+          formatter: function(name) {
+            return name + '（' + legendItem[name] + '）';
+          },
+          data: legendData,
+        },
+        tooltip: {
+          trigger: 'item',
+          formatter: "{b} <br/>{a} : {c} ({d}%)"
+        },
+        series: [{
+          name: item_describe,
+          type: 'pie',
+          radius: ['10%', '55%'],
+          center: ['40%', '70%'],
+          label: {
+            normal: {
+              show: true,
+            },
+          },
+          data: chart_data,
+        }],
+      };
+      myChart.setOption(option);
+    }
+  </script>
+
+</body>
+</html>

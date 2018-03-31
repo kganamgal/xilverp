@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta http-equiv="content-type" content="text/html; charset=UTF-8"/>
+		<title>OSS web直传</title>
+		<link rel="stylesheet" type="text/css" href="/statics/css/uploader_style.css"/>
+		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+	</head>
+	<body>
+
+		<h2 id="id_Cnt"></h2>
+<!-- 		<form name=theform>
+			<input type="radio" name="myradio" value="local_name" checked=true/> 上传文件名字保持本地文件名字
+			<input type="radio" name="myradio" value="random_name" /> 上传文件名字是随机文件名
+		<br/>
+		上传到指定目录:<input type="text" id='dirname' placeholder="如果不填，默认是上传到根目录" size=50>
+		</form> -->
+
+		<h4>您所选择的文件列表：</h4>
+		<div id="ossfile">你的浏览器不支持flash,Silverlight或者HTML5！</div>
+
+		<br/>
+
+		<div id="container">
+			<a id="selectfiles" href="javascript:void(0);" class='btn'>选择文件</a>
+			<a id="postfiles" href="javascript:void(0);" class='btn'>开始上传</a>
+		</div>
+
+		<pre id="console"></pre>
+
+		<p>&nbsp;</p>
+
+	</body>
+	<script type="text/javascript" src="/statics/js/online_20180105.js"></script>
+	<script type="text/javascript" src="/statics/js/often_by_Edwin_201712182301.js"></script>
+	<script>
+		$.ajaxSetup({
+      data: {
+        csrfmiddlewaretoken: '{{ csrf_token }}'
+      },
+    });
+
+		var classify     = parent.child_data['classify'];
+		var UDID         = parent.child_data['UDID'];
+		var policyBase64 = '';
+		var message      = '';
+		var signature    = '';
+		var host         = '';
+		var accessKey    = '';
+		var uploadPath   = classify+'信息/'+UDID+'/';
+		$('#id_Cnt').html('上传路径：'+uploadPath);
+
+		var g_dirname = ''
+		var g_object_name = ''
+		var g_object_name_type = ''
+		var now = timestamp = Date.parse(new Date()) / 1000;
+
+		function get_dirname()
+		{
+		    g_dirname = uploadPath;
+		}
+
+		function get_suffix(filename) {
+		    pos = filename.lastIndexOf('.')
+		    suffix = ''
+		    if (pos != -1) {
+		        suffix = filename.substring(pos)
+		    }
+		    return suffix;
+		}
+
+		function calculate_object_name(filename)
+		{
+        g_object_name += "${filename}"
+		    return ''
+		}
+
+		function get_uploaded_object_name(filename)
+		{
+        tmp_name = g_object_name
+        tmp_name = tmp_name.replace("${filename}", filename);
+        return tmp_name
+		}
+
+		function set_upload_param(up, filename, ret)
+		{
+		    g_object_name = g_dirname;
+		    if (filename != '') {
+		        suffix = get_suffix(filename)
+		        calculate_object_name(filename)
+		    }
+		    new_multipart_params = {
+		        'key' : g_object_name,
+		        'policy': policyBase64,
+		        'OSSAccessKeyId': accessKey,
+		        'success_action_status' : '200', //让服务端返回200,不然，默认会返回204
+		        'signature': signature,
+		    };
+
+		    up.setOption({
+		        'url': host,
+		        'multipart_params': new_multipart_params
+		    });
+
+		    up.start();
+		}
+
+		var uploader = new plupload.Uploader({
+			runtimes : 'html5,flash,silverlight,html4',
+			browse_button : 'selectfiles',
+		    //multi_selection: false,
+			container: document.getElementById('container'),
+			flash_swf_url : '/statics/lib/plupload-2.1.2/js/Moxie.swf',
+			silverlight_xap_url : '/statics/lib/plupload-2.1.2/js/Moxie.xap',
+		  url : 'http://oss.aliyuncs.com',
+
+			init: {
+				PostInit: function() {
+					document.getElementById('ossfile').innerHTML = '';
+					document.getElementById('postfiles').onclick = function()
+					{
+								// 向服务器请求密码
+								$.ajax({
+								  url: "{% url 'get_file_upload_passwords' %}",
+								  type: 'POST',
+								  data: {
+								    'classify': classify,
+								    'UDID': UDID,
+								    'filename': '',
+								  },
+								  success: function(ret)
+								  {
+								    policyBase64 = ret.policyBase64;
+								    message      = policyBase64;
+								    signature    = ret.signature;
+								    host         = ret.host;
+								    accessKey    = ret.accessKey;
+								    set_upload_param(uploader, '', false);
+								  },
+								});
+		            return false;
+					};
+				},
+
+				FilesAdded: function(up, files) {
+					plupload.each(files, function(file) {
+						document.getElementById('ossfile').innerHTML += '<div id="' + file.id + '">' + file.name + ' (' + plupload.formatSize(file.size) + ')<b></b>'
+						+'<div class="progress"><div class="progress-bar" style="width: 0%"></div></div>'
+						+'</div>';
+					});
+				},
+
+				BeforeUpload: function(up, file) {
+		            get_dirname();
+		            set_upload_param(up, file.name, true);
+		        },
+
+				UploadProgress: function(up, file) {
+					var d = document.getElementById(file.id);
+					d.getElementsByTagName('b')[0].innerHTML = '<span>' + file.percent + "%</span>";
+		            var prog = d.getElementsByTagName('div')[0];
+					var progBar = prog.getElementsByTagName('div')[0]
+					progBar.style.width= 2*file.percent+'px';
+					progBar.setAttribute('aria-valuenow', file.percent);
+				},
+
+				FileUploaded: function(up, file, info) {
+		            if (info.status == 200)
+		            {
+		                document.getElementById(file.id).getElementsByTagName('b')[0].innerHTML = 'upload to oss success, object name:' + get_uploaded_object_name(file.name);
+		                // 刷新父页面
+		                parent.location.reload();
+		            }
+		            else
+		            {
+		                document.getElementById(file.id).getElementsByTagName('b')[0].innerHTML = info.response;
+		            }
+				},
+
+				Error: function(up, err) {
+					document.getElementById('console').appendChild(document.createTextNode("\nError xml:" + err.response));
+				}
+			}
+		});
+
+		uploader.init();
+	</script>
+</html>

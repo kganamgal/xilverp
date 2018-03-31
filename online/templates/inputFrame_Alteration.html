@@ -1,0 +1,611 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>合同变更信息详情</title>
+  <style type="text/css">
+    .selected {
+      color: maroon;
+    }
+    strong {
+      color: red;
+    }
+    .style_float{
+      text-align: right;
+    }
+    .style_percent{
+      text-align: right;
+    }
+    .style_input{
+      text-align: center;
+    }
+    .col-sm-1{width: 12.5% !important;}
+    .col-sm-2{width: 25% !important;}
+    .col-sm-3{width: 37.5% !important;}
+    .col-sm-4{width: 50% !important;}
+    .col-sm-5{width: 62.5% !important;}
+    .col-sm-6{width: 75% !important;}
+    .col-sm-7{width: 87.5% !important;}
+    .col-sm-8{width: 100% !important;}
+  </style>
+</head>
+<body>
+  <div id="id_container" class="container-fluid">
+
+    <!-- 按钮组 -->
+    <div id="id_btns" class="row clearfix" style="margin-top: 4px;">
+      <div class="btn-toolbar" role="toolbar" style="float: right;">
+        <button class="btn btn-default btn-01 btn-bottom" id="id_btn_Delete">删除</button>
+        <button class="btn btn-default btn-01 btn-bottom" id="id_btn_Attach">查看附件</button>
+        <button class="btn btn-default btn-01 btn-bottom" id="id_btn_Table" >生成表格</button>
+        <button class="btn btn-default btn-01 btn-bottom" id="id_btn_Save"  >保存</button>
+        <button class="btn btn-default btn-01 btn-bottom" id="id_btn_Cancel">取消</button>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Jquery组件引用 -->
+  <!-- <script src="/statics/js/jquery.min.js"></script> -->
+  <!-- bootstrap组件引用 -->
+  <link rel="stylesheet" href="/statics/css/bootstrap.min.css">
+  <!-- <script src="/statics/js/bootstrap.min.js"></script> -->
+  <!-- bootstrap-table组件引用 -->
+  <link rel="stylesheet" href="/statics/css/bootstrap-table.css">
+  <!-- <script src="/statics/js/bootstrap-table.min.js"></script> -->
+  <!-- <script src="/statics/js/bootstrap-table-zh-CN.js"></script> -->
+  <!-- layer -->
+  <!-- <script type="text/javascript" src="/statics/js/layer.js"></script> -->
+  <!-- edwin常用函数集合 -->
+  <!-- <link rel="stylesheet" href="/statics/css/online_20180105.css"> -->
+  <script type="text/javascript" src="/statics/js/online_20180105.js"></script>
+  <script type="text/javascript" src="/statics/js/often_by_Edwin_201712182301.js"></script>
+
+  <script type="text/javascript">
+    $.ajaxSetup({
+      data: {
+        csrfmiddlewaretoken: '{{ csrf_token }}'
+      },
+    });
+
+    // 构造表单
+    var composing = [{
+      'section_word': '基本资料',
+      'section_btn': true,
+      'key_word': ['变更识别码', '变更类型', '变更编号', 'nextLine', '变更主题', 'nextLine', '变更原因', ],
+      'short_key': [null, null, null, 'nextLine', null, 'nextLine', null, ],
+      'input_type': ['text', 'text', 'text', 'nextLine', 'text', 'nextLine', 'textarea', ],
+      'value_type': ['input', 'input', 'input', 'nextLine', 'input', 'nextLine', 'text', ],
+      'input_width': [1, 1, 2, 'nextLine', 6, 'nextLine', 6, ],
+      'input_height': [null, null, null, 'nextLine', null, 'nextLine', 50, ],
+      'font_size': [12, 12, 12, 'nextLine', 12, 'nextLine', 12, ],
+      'edit_btn': [false, false, false, 'nextLine', false, 'nextLine', false, ],
+    }, {
+      'section_word': '合同资料',
+      'section_btn': true,
+      'key_word': ['立项识别码', '项目名称', '分项名称', 'nextLine', '合同识别码', '合同类别', '合同编号', 'nextLine', '合同名称', 'nextLine', '甲方单位名称', '乙方单位名称', 'nextLine', '丙方单位名称', '丁方单位名称', ],
+      'short_key': [null, null, null, 'nextLine', null, null, null, 'nextLine', null, 'nextLine', null, null, 'nextLine', null, null, ],
+      'input_type': ['text', 'text', 'text', 'nextLine', 'text', 'text', 'text', 'nextLine', 'text', 'nextLine', 'text', 'text', 'nextLine', 'text', 'text', ],
+      'value_type': ['input', 'input', 'input', 'nextLine', 'input', 'input', 'input', 'nextLine', 'input', 'nextLine', 'input', 'input', 'nextLine', 'input', 'input', ],
+      'input_width': [1, 1, 2, 'nextLine', 1, 1, 2, 'nextLine', 6, 'nextLine', 3, 3, 'nextLine', 3, 3, ],
+      'input_height': [null, null, null, 'nextLine', null, null, null, 'nextLine', null, 'nextLine', null, null, 'nextLine', null, null, ],
+      'font_size': [12, 12, 12, 'nextLine', 12, 12, 12, 'nextLine', 12, 'nextLine', 12, 12, 'nextLine', 12, 12, ],
+      'edit_btn': [false, false, false, 'nextLine', false, false, false, 'nextLine', false, 'nextLine', false, false, 'nextLine', false, false, ],
+    }, {
+      'section_word': '财务资料',
+      'section_btn': false,
+      'key_word': ['合同值_签订时', '预估变更额度', '变更额度', ],
+      'short_key': ['合同签订暂定值', null, null, ],
+      'input_type': ['text', 'text', 'text', ],
+      'value_type': ['float', 'float', 'float', ],
+      'input_width': [1, 2, 2, ],
+      'input_height': [null, null, null, ],
+      'font_size': [12, 12, 12, ],
+      'edit_btn': [false, true, true, ],
+    }, {
+      'section_word': '日期资料',
+      'section_btn': true,
+      'key_word': ['变更登记日期', '变更生效日期', ],
+      'short_key': [null, null, ],
+      'input_type': ['date', 'date', ],
+      'value_type': ['input', 'input', ],
+      'input_width': [1, 1, ],
+      'input_height': [null, null, ],
+      'font_size': [12, 12, ],
+      'edit_btn': [false, false, ],
+    }, {
+      'section_word': '其他资料',
+      'section_btn': true,
+      'key_word': ['变更备注', ],
+      'short_key': [null, ],
+      'input_type': ['textarea', ],
+      'value_type': ['text', ],
+      'input_width': [6, ],
+      'input_height': [100, ],
+      'font_size': [12, ],
+      'edit_btn': [false, ],
+    }, ];
+
+    var child_data = {};
+    var dict_Chn_Eng = {
+      '单位': 'Company',
+      '立项': 'Init',
+      '招标': 'Bidding',
+      '合同': 'Contract',
+      '变更': 'Alteration',
+      '分包合同': 'SubContract',
+      '预算': 'Budget',
+      '付款': 'Payment',
+    };
+    var behavior = parent.child_data['behavior'];
+    var key_frame = parent.child_data['key_table'];
+    var data_head = parent.child_data['data_head'];
+    var data_type = parent.child_data['data_type'];
+    var data_value = parent.child_data['data_value'];
+    var data_head_type = twoListToOneDict(data_head, data_type);
+    var permission = {};
+    $(main);
+
+    function main() {
+      // 初次加载页面
+      $(window).load(windowOnLoad);
+    }
+
+    function windowOnLoad() {
+      // 绘制表单
+      var div_forms = $('#id_container');
+      var i, j, div_section, html_sectionHead, html_row, html_unit;
+      var section_word, section_btn;
+      var key_word, input_type, input_width, input_height, font_size, edit_btn;
+
+      for (i = 0; i < composing.length; i++) { // 遍历composing数组
+        // 建立section头
+        section_word = composing[i].section_word;
+        section_btn = composing[i].section_btn;
+        div_section = $('<div name="Section_' + section_word + '"></div>');
+        if (section_btn) {
+          html_sectionHead = $('<div class="row clearfix"><div class="col-sm-1" style="padding: 0px; margin: 0px;"><h5 style="text-align: center;">' + section_word + '</h5></div><div class="col-sm-1" style="padding: 0px; margin: 0px;"><button id="id_button_' + section_word + '" class="btn btn-default btn-edit" type="button">修改</button></div></div>');
+        } else {
+          html_sectionHead = $('<div class="row clearfix"><div class="col-sm-1" style="padding: 0px; margin: 0px;"><h5 style="text-align: center;">' + section_word + '</h5></div></div>');
+        };
+        div_section.append(html_sectionHead);
+        // 遍历每一行
+        html_row = $('<div class="row clearfix" style="margin-bottom: 6px;"></div>');
+        for (j = 0; j < composing[i].key_word.length; j++) {
+          key_word = composing[i].key_word[j];
+          short_key = composing[i].short_key[j] || key_word;
+          input_type = composing[i].input_type[j];
+          value_type = composing[i].value_type[j];
+          input_width = composing[i].input_width[j];
+          input_height = composing[i].input_height[j];
+          font_size = composing[i].font_size[j];
+          edit_btn = composing[i].edit_btn[j];
+          if (input_type == 'text' || input_type == 'date') { // 对一般文本/日期 表单
+            html_unit = '<div class="col-sm-1" style="padding: 0px; margin: 0px;"><label class="pull-right" style="font-size: 12px; padding-top: 4px; padding-right: 10px;">' + short_key + '</label></div>';
+            if (edit_btn) { // 附带<修改>按钮时
+              html_unit += '<div class="col-sm-' + input_width + '" style="padding: 0px; margin: 0px;"><div class="input-group"><input type="' + input_type + '" name="' + key_word + '" id="id_' + key_word + '" class="style_' + value_type + '" style="width: 100%;font-size: ' + font_size + 'px;" /><span class="input-group-btn"><button id="id_button_' + key_word + '" class="btn btn-default btn-edit" type="button">修改</button></span></div></div>';
+            } else { // 不带<修改>按钮时
+              html_unit += '<div class="col-sm-' + input_width + '" style="padding: 0px; margin: 0px;"><input type="text" name="' + key_word + '" id="id_' + key_word + '" class="style_' + value_type + '" style="width: 100%;font-size: ' + font_size + 'px;" /></div>';
+            };
+            // 将html添加进行
+            html_row.append($(html_unit));
+          } else if (input_type == 'textarea') { // 对富文本表单
+            html_unit = $('<div class="col-sm-1" style="padding: 0px; margin: 0px;"><label class="pull-right" style="font-size: 12px; padding-top: 4px; padding-right: 10px;">' + short_key + '</label></div><div class="col-sm-' + input_width + '" style="padding: 0px; margin: 0px;"><textarea type="text" name="' + key_word + '" id="id_' + key_word + '" class="style_' + value_type + '" style="resize: none; width: 100%; height: ' + input_height + 'px; text-align: left; font-size: ' + font_size + 'px;" /></textarea></div>');
+            // 将html添加进行
+            html_row.append(html_unit);
+          } else if (input_type == 'nextLine') { // 对换行符
+            div_section.append(html_row);
+            // 另起一行
+            html_row = $('<div class="row clearfix" style="margin-bottom: 6px;"></div>');
+          };
+        };
+        div_section.append(html_row);
+        // 下划线
+        div_section.append($('<hr />'));
+        $('#id_btns').before(div_section);
+      };
+
+      // 数据呈现控件
+      for (var key in data_head_type) {
+        // 格式化数据
+        var input_value = data_value[key];
+        if ((!input_value && typeof(input_value) != "undefined" && input_value != 0)) {
+          input_value = '';
+        } else if (data_head_type[key] == '浮点型') {
+          input_value = toThousands(input_value);
+        } else if (data_head_type[key] == '百分比') {
+          input_value = toPercents(input_value);
+        }
+        // 填充数值
+        $('#id_' + key).val(input_value);
+      };
+      // 将修改按钮设为不可用
+      $('.btn-edit,.btn-bottom').attr('disabled', 'disabled');
+      // 将input和textarea设为不可用
+      $('input,textarea').attr('readonly', 'readonly');
+      // 为各按钮注册事件
+      $('#id_btn_Cancel').removeAttr('disabled');
+      $(document).on('click', '#id_btn_Cancel', function() {
+        // 检查有无改动
+        var data_save_head = parent.child_data['data_save_head'];
+        var data_save_type = parent.child_data['data_save_type'];
+        var data_save_head_type = twoListToOneDict(data_save_head, data_save_type);
+        var data_from_input = getDataFromUser(data_save_head_type);
+        var flag = DictIsEqual(data_from_input, data_value);
+        if (!flag) {
+          layer.open({
+            type: 1,
+            btn: ['确定', '取消'],
+            title: '警告',
+            closeBtn: 0,
+            content: '<div style="margin: 20px;">数据已发生变动，尚未保存，确定要退出吗？<br/>点击<确定>不保存退出</div>',
+            yes: function(index, layero) {
+              // 关闭页面
+              var i = parent.layer.getFrameIndex(window.name); //先得到当前iframe层的索引
+              parent.layer.close(i); //再执行关闭
+            },
+          });
+          return;
+        };
+        // 关闭页面
+        var index = parent.layer.getFrameIndex(window.name); //先得到当前iframe层的索引
+        parent.layer.close(index); //再执行关闭
+      });
+      $(document).on('click', '#id_btn_Save', function() {
+        // 检查有无改动
+        var data_save_head = parent.child_data['data_save_head'];
+        var data_save_type = parent.child_data['data_save_type'];
+        var data_save_head_type = twoListToOneDict(data_save_head, data_save_type);
+        var data_from_input = getDataFromUser(data_save_head_type);
+        var flag = DictIsEqual(data_from_input, data_value);
+        if (flag) {
+          layer.alert('数据无改动，无须保存');
+          return;
+        };
+        // 询问是否需要确定要保存
+        layer.open({
+          type: 1,
+          btn: ['确定', '取消'],
+          title: '提示',
+          closeBtn: 0,
+          content: '<div style="margin: 20px;">即将覆盖数据，确定要保存吗？<br/>点击<确定>保存</div>',
+          yes: function(index, layero) {
+            // 关闭本问询框
+            layer.close(index);
+            // 执行保存ajax
+            $.ajax({
+              url: "{% url 'ajax_save_data' %}",
+              type: 'POST',
+              data: {
+                'classify': '变更',
+                'project': $('#id_项目名称')[0].value,
+                'data': JSON.stringify(data_from_input),
+              },
+              success: function (ret) {
+                // 返回结果
+                if (ret == 'Done') {
+                  layer.alert('数据保存成功');
+                  // 将新值存入缓存
+                  // data_value = data_from_input;
+                  // 刷新父页面的表格
+                  parent.$('#id_bootstrap_table').bootstrapTable('refresh', {silent: true});
+                  // 将本页面关闭
+                  var index = parent.layer.getFrameIndex(window.name); //先得到当前iframe层的索引
+                  parent.layer.close(index); //再执行关闭
+                }else{
+                  layer.alert('数据保存失败，错误信息：<br/>' + ret);
+                };
+              },
+            });
+          },
+        });
+      });
+      $(document).on('click', '#id_btn_Delete', function() {
+        // 取得变更识别码
+        var UDID = parseInt($('#id_变更识别码').val()) || 0;
+        // 询问是否需要确定要删除
+        layer.open({
+          type: 1,
+          btn: ['确定', '取消'],
+          title: '警告',
+          closeBtn: 0,
+          content: '<div style="margin: 20px;">即将删除该记录。<br/>一旦删除，将<strong>无法恢复</strong>，您确定要删除吗？<br/>在下方文本框中输入<strong>DELETE</strong>后，点击<确定>删除<input id="id_ifdel" style="width: 95%;"></div>',
+          yes: function(index, layero) {
+            // 核对是否输入了delete
+            var input_message = $('#id_ifdel').val();
+            if (input_message.toLowerCase() !== 'delete') {
+              layer.alert('请输入"DELETE"6个英文字母后，再点击<确定>按钮完成删除');
+              return;
+            };
+            // 关闭本问询框
+            layer.close(index);
+            // 执行保存ajax
+            $.ajax({
+              url: "{% url 'ajax_del_data' %}",
+              type: 'POST',
+              data: {
+                'classify': '变更',
+                'project': $('#id_项目名称').val(),
+                'UDID': UDID,
+              },
+              success: function (ret) {
+                // 返回结果
+                if (ret == 'Done') {
+                  // 刷新父页面的表格
+                  parent.$('#id_bootstrap_table').bootstrapTable('refresh', {silent: true});
+                  // 关闭页面
+                  var i = parent.layer.getFrameIndex(window.name); //先得到当前iframe层的索引
+                  parent.layer.close(i); //再执行关闭
+                  parent.layer.alert('信息删除成功');
+                } else {
+                  layer.alert('数据删除失败，错误信息：<br/>' + ret);
+                };
+              },
+            });
+          },
+        });
+      });
+      // 获取权限数据
+      $.ajax({ // 权限
+        url: "{% url 'get_WritePermissionObj' %}",
+        type: 'POST',
+        data: {},
+        success: function(ret) {
+          permission = ret;
+          var project = $('#id_项目名称').val();
+          var flag = $.inArray(project, permission.变更.split('|')) >= 0 || (behavior == 'New' && permission.变更) // 数组包含判断，包含>=0，不含<0
+          if (flag) { // 有权限则激活相应按钮
+            $('#id_button_基本资料').removeAttr('disabled');
+            $('#id_button_合同资料').removeAttr('disabled');
+            $('#id_button_预估变更额度').removeAttr('disabled');
+            $('#id_button_变更额度').removeAttr('disabled');
+            $('#id_button_日期资料').removeAttr('disabled');
+            $('#id_button_其他资料').removeAttr('disabled');
+            $('#id_btn_Save').removeAttr('disabled');
+            if ($('#id_变更识别码').val()) {
+              $('#id_btn_Delete').removeAttr('disabled');
+            };
+          };
+        },
+      });
+
+      function call_inputer(inputer_labels, inputer_form_type, func_arg = function() {}, func_fill = function() {}) {
+        // 构造标准化inputer参数及回调
+        // arg1：需要用户输入的项；arg2：这几项的类型；arg3：自定义arg1、2；arg4：自定义回调填写方式
+        child_data['inputer_data'] = {
+          'label': [],
+          'data': [],
+          'result_key': [],
+          'descriptoin': [],
+          'form_type': [],
+          'valid': [],
+        };
+        for (var i in inputer_labels) {
+          child_data['inputer_data']['label'].push(inputer_labels[i]);
+          child_data['inputer_data']['data'].push($('#id_' + inputer_labels[i]).val());
+          child_data['inputer_data']['result_key'].push(null);
+          child_data['inputer_data']['descriptoin'].push('（请在此处填写<strong>' + inputer_labels[i] + '</strong>）');
+          child_data['inputer_data']['form_type'].push(inputer_form_type[i]);
+          child_data['inputer_data']['valid'].push(null);
+        };
+        func_arg();
+        // 打开输入页面
+        layer.open({
+          type: 2,
+          btn: ['确定', '取消'],
+          title: '',
+          area: ['800px', '80%'],
+          closeBtn: 0,
+          content: "{% url 'inputer' '' %}",
+          yes: function(index, layero) {
+            // 将用户填写的值传回本体
+            var body = layer.getChildFrame('body', index);
+            if (body.find('[valid="false"]').length > 0) {
+              layer.alert('请修改红色文本框内数据！');
+              return;
+            };
+            for (var i in inputer_labels) {
+              $('#id_' + inputer_labels[i]).val(body.find('#id_' + inputer_labels[i])[0].value);
+            };
+            var fl = func_fill(body); // 如果函数没有返回值就认为正常，否则就将返回值警告出来
+            if (fl) {
+              layer.alert(fl);
+            } else {
+              layer.close(index);
+            };
+          },
+        });
+      };
+
+      function call_table_inputer(key, dict_fill, func_fill = function() {}, func_valid = function() {}) {
+        // 打开立项管理页面
+        child_data['key_table'] = key; // 立项 | 招标
+        var key_url = dict_Chn_Eng[child_data['key_table']];
+        var content_url = "{% url 'inputer_table' 'ewhuvlk' %}";
+        layer.open({
+          type: 2,
+          btn: ['确定', '取消'],
+          title: child_data['key_table'] + '信息管理',
+          area: ['100%', '100%'],
+          maxmin: true,
+          content: content_url.replace('ewhuvlk', key_url),
+          yes: function(index, layero) {
+            // 将用户填写的值传回本体
+            var body = layer.getChildFrame('body', index);
+            var data_uniqueid = $(body.find('.selected')[0]).attr('data-uniqueid') || null;
+            var data_index = $(body.find('.selected')[0]).attr('data-index') || null;
+            var datas = JSON.parse($(body.find('#id_JSON')[0]).html());
+            var data = {};
+            for (var i = 0; i < datas.length; i++) {
+              for (k in datas[i]) {
+                if (datas[i][k] == data_uniqueid) { // 如果主识别码==data_uniqueid
+                  data = datas[i];
+                };
+                break;
+              };
+            };
+            var fv = func_valid(data); // 如果函数没有返回值就认为正常，否则就将返回值警告出来
+            if (fv) {
+              layer.alert(fv);
+              return;
+            };
+            for (var id in dict_fill) {
+              var v = data[dict_fill[id]];
+              if (v > 0 && id.search('识别码') < 0) { // 如果值是数字，就认为其应该可以格式化为千分位形式
+                $('#' + id).val(toThousands(v));
+              } else if (v === 0) {
+                $('#' + id).val(toThousands(v));
+              } else {
+                $('#' + id).val(v);
+              };
+            };
+            func_fill(data);
+            layer.close(index);
+          },
+        });
+      };
+      // 修改基本资料
+      $(document).on('click', '#id_button_基本资料', function() {
+        // 1.检查有无权限
+        // 2.进行业务逻辑
+        var inputer_labels = [ // 需要接受用户修改的项
+          '变更类型',
+          '变更编号',
+          '变更主题',
+          '变更原因',
+        ];
+        var inputer_form_type = [ // 对应的输入类型
+          ['批价', '工程签证', '设计变更', ],
+          'input',
+          'input',
+          'text',
+        ];
+        call_inputer(inputer_labels, inputer_form_type);
+      });
+      // 修改合同资料  // To be fixed: 避免出现循环引用
+      $(document).on('click', '#id_button_合同资料', function() {
+        // 1.检查有无权限
+        // 2.进行业务逻辑
+        // 打开合同管理页面
+        var key = '合同';
+        var dict_fill = { // 待填写input的id：表格行中相应列名
+          'id_立项识别码': '立项识别码',
+          'id_项目名称': '项目名称',
+          'id_分项名称': '分项名称',
+          'id_合同识别码': '合同识别码',
+          'id_合同类别': '合同类别',
+          'id_合同编号': '合同名称',
+          'id_甲方单位名称': '甲方单位名称',
+          'id_乙方单位名称': '乙方单位名称',
+          'id_丙方单位名称': '丙方单位名称',
+          'id_丁方单位名称': '丁方单位名称',
+          'id_合同值_签订时': '合同值_签订时',
+        };
+        call_table_inputer(
+          key,
+          dict_fill,
+          function(data) {},
+          function(data) {
+            var flag = $.inArray(data.项目名称, permission.变更.split('|')) < 0 // 如果没有调整该项目的权限
+            if (flag) {
+              return '您没有权限操作<' + data.项目名称 + '>的合同变更信息';
+            };
+          });
+      });
+      // 修改预估变更额度
+      $(document).on('click', '#id_button_预估变更额度', function() {
+        // 1.检查有无权限
+        // 2.进行业务逻辑
+        var inputer_labels = [ // 需要接受用户修改的项
+          '预估变更额度',
+        ];
+        var inputer_form_type = [ // 对应的输入类型
+          'input',
+        ];
+        call_inputer(
+          inputer_labels,
+          inputer_form_type,
+          function() {},
+          function(body) {
+            // 收集数据
+            var money = body.find('#id_预估变更额度')[0].value;
+            money = Number(money.replace(/[\, ]/g, ''));
+            $('#id_预估变更额度').val(toThousands(money));
+          });
+      });
+      // 修改变更额度
+      $(document).on('click', '#id_button_变更额度', function() {
+        // 1.检查有无权限
+        // 2.进行业务逻辑
+        var inputer_labels = [ // 需要接受用户修改的项
+          '变更额度',
+        ];
+        var inputer_form_type = [ // 对应的输入类型
+          'input',
+        ];
+        call_inputer(
+          inputer_labels,
+          inputer_form_type,
+          function() {},
+          function(body) {
+            // 收集数据
+            var money = body.find('#id_变更额度')[0].value;
+            money = Number(money.replace(/[\, ]/g, ''));
+            $('#id_变更额度').val(toThousands(money));
+          });
+      });
+      // 修改日期资料
+      $(document).on('click', '#id_button_日期资料', function() {
+        // 1.检查有无权限
+        // 2.进行业务逻辑
+        var inputer_labels = [ // 需要接受用户修改的项
+          '变更登记日期',
+          '变更生效日期',
+        ];
+        var inputer_form_type = [ // 对应的输入类型
+          'date',
+          'date',
+        ];
+        call_inputer(
+          inputer_labels,
+          inputer_form_type);
+      });
+      // 修改其他资料
+      $(document).on('click', '#id_button_其他资料', function() {
+        // 1.检查有无权限
+        // 2.进行业务逻辑
+        var inputer_labels = [ // 需要接受用户修改的项
+          '变更备注',
+        ];
+        var inputer_form_type = [ // 对应的输入类型
+          'text',
+        ];
+        call_inputer(
+          inputer_labels,
+          inputer_form_type);
+      });
+      // 查看附件
+      if (behavior == 'View') { // 查看模式
+        // 激活附件模块
+        $('#id_btn_Attach').removeAttr('disabled');
+        $(document).on('click', '#id_btn_Attach', function() {
+          child_data['key_frame'] = key_frame;
+          var UDID = $('input')[0].value;
+          child_data['UDID'] = UDID;
+          var key_url = dict_Chn_Eng[child_data['key_frame']];
+          var content_url = "{% url 'attachFrame' 'ewhuvlk' %}"
+          // 打开查看附件框架
+          layer.open({
+            type: 2,
+            title: '查看' + key_frame + '附件详情',
+            area: ['100%', '100%'],
+            content: content_url.replace('ewhuvlk', key_url),
+          });
+        });
+      };
+    }
+  </script>
+
+</body>
+</html>

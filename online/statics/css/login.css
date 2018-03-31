@@ -1,0 +1,29 @@
+/*
+* @Author: Administrator
+* @Date:   2017-10-30 13:45:01
+* @Last Modified by:   Administrator
+* @Last Modified time: 2017-11-06 15:12:57
+*/
+body
+{
+	background-image: url(/statics/images/log_in_bgp.jpg);
+}
+div
+{
+	/*background-color: silver; filter: alpha(Opacity=20); -moz-opacity: 0.6; opacity: 0.6;*/
+	width: 300px;
+	margin-left: auto;
+	margin-right: 50px;
+	padding-top: 110px;
+	padding-left: 40px;
+}
+
+input
+{
+	width: 200px;
+}
+
+input.submit
+{
+	width: 260px;
+}

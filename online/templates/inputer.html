@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>请输入...</title>
+  <style type="text/css">
+    input{
+      height: 30px !important;
+    }
+    strong {
+      color: red !important;
+    }
+    [valid=false]{
+      background-color: pink !important;
+    }
+  </style>
+</head>
+<body>
+  <div id="id_container" class="container-fluid">
+    <!-- 添加各种表单，标签、填写要求一行，文本框一行 -->
+    <!-- 最下面是确定、取消 -->
+  </div>
+
+  <!-- edwin常用函数集合 -->
+  <link rel="stylesheet" href="/statics/css/online_20180105.css">
+  <script type="text/javascript" src="/statics/js/online_20180105.js"></script>
+  <script type="text/javascript" src="/statics/js/often_by_Edwin_201712182301.js"></script>
+
+  <script type="text/javascript">
+    $(main);
+
+    function main() {
+      // 初次加载页面
+      $(window).load(windowOnLoad);
+    };
+
+    function windowOnLoad() {
+      // 取得父页面传递来的参数值
+      var labels       = parent.child_data['inputer_data']['label'];
+      var datas        = parent.child_data['inputer_data']['data'];
+      var result_keys  = parent.child_data['inputer_data']['result_key'];
+      var descriptoins = parent.child_data['inputer_data']['descriptoin'];
+      var form_types   = parent.child_data['inputer_data']['form_type'];
+      var valids       = parent.child_data['inputer_data']['valid'];
+      // 根据参数值构造页面
+      var div_container = $('#id_container');
+      for (var i = 0; i < labels.length; i++) {
+        var label       = labels[i];
+        var data        = datas[i];
+        var result_key  = result_keys[i] || label;
+        var descriptoin = descriptoins[i] || '';
+        var form_type   = form_types[i];
+        var valid       = valids[i];
+        var row_html = $('<div class="row clearfix" style="margin-bottom: 6px;"></div>');
+        row_html.append($('<div class="col-sm-2" style="padding: 0px; margin: 0px;"><label class="pull-right" style="font-size: 12px; padding-top: 4px; padding-right: 10px;">'+label+'</label></div>'));
+        row_html.append($('<div class="col-sm-9" style="padding: 0px; margin: 0px;"><label class="pull-left" style="font-size: 12px; padding-top: 4px; padding-right: 10px;">'+descriptoin+'</label></div>'));
+        div_container.append(row_html);
+        row_html = $('<div class="row clearfix" style="margin-bottom: 6px;"></div>');
+        if (form_type == 'input') {
+          row_html.append($('<input type="text" name="'+result_key+'" id="id_'+result_key+'" valid="true" class="style_input" style="width: 85%;font-size: 12px; margin-left: 8%;" />'));
+        }else if (form_type == 'date') {
+          row_html.append($('<input type="date" name="'+result_key+'" id="id_'+result_key+'" valid="true" class="style_input" style="width: 85%;font-size: 12px; margin-left: 8%;" />'));
+        }else if (form_type == 'text') {
+          row_html.append($('<textarea type="text" name="'+result_key+'" id="id_'+result_key+'" class="style_'+form_type+'" style="resize: none; width: 85%; height: 100px; font-size: 12px; margin-left: 8%;"></textarea>'));
+        }else{
+          var selector = $('<select name="'+result_key+'" id="id_'+result_key+'" style="width: 85%; font-size: 12px; margin-left: 8%;"></select>');
+          selector.append($('<option value=""></option>'));
+          for (var j = 0; j < form_type.length; j++) {
+            selector.append($('<option value="'+form_type[j]+'">'+form_type[j]+'</option>'));
+          };
+          row_html.append(selector);
+        };
+        div_container.append(row_html);
+        // 填充控件值
+        $('#id_'+result_key).val(data);
+        // 注册监控事件，输错后变红报警
+        if (valid) {
+          $(document).on('input', '#id_'+result_key, {valid: valid}, function(ele) {
+            // 检查输入数据的合法性
+            var value = this.value;
+            var valid = ele.data.valid;
+            var result = eval(valid);
+            if (result) {
+              $(this).attr('valid', 'true');
+            }else{
+              $(this).attr('valid', 'false');
+            };
+          });
+        };
+      };
+    };
+  </script>
+
+</body>
+</html>

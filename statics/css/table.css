@@ -1,0 +1,140 @@
+/*
+* @Author: Administrator
+* @Date:   2017-11-14 09:09:23
+* @Last Modified by:   Administrator
+* @Last Modified time: 2017-11-17 13:12:50
+*/
+
+/* Border styles */
+/*表单群*/
+
+.form_container
+{
+	padding: 5px;
+	width: 990px;
+	height: 260px;
+	font-size: 12px;
+	position: relative;
+	overflow: auto;
+}
+.form_container label {
+	margin: 5px;
+    width: 150px;
+    display: inline-block;
+    text-align: right;
+}
+.form_container input
+{
+	margin: 5px;
+    height: 23px;
+    border: 1px solid #ddd;
+    padding-left: 10px;
+    font-size: 12px;
+    border-radius: 3px;
+    width: 300px;
+}
+.form_container textarea
+{
+	resize: none;
+	margin: 5px;
+	margin-bottom: -25px;
+    height: 50px;
+    border: 1px solid #ddd;
+    padding-left: 10px;
+    font-size: 12px;
+    border-radius: 3px;
+    width: 300px;
+}
+.form_container .auto_created_form.浮点型
+{
+	text-align: right;
+}
+
+/*表格*/
+.table_container
+{
+	width: 1000px;
+	height: auto;
+	overflow: auto;
+}
+.th_container
+{
+	width: 980px;
+	height: auto;
+	overflow: auto;
+}
+.th_container::-webkit-scrollbar 	/*隐藏滚动条*/
+{
+	display: none;
+}
+.td_container
+{
+	width: 1000px;
+	height: 300px;
+	overflow: auto;
+}
+
+.table_container tr
+{
+	padding: 5px 10px;
+	font-size: 12px;
+	font-family: Verdana;
+	color: black;
+	/*color: rgb(177, 106, 104);*/
+}
+.t_head
+{
+	color: rgb(177, 106, 104);
+}
+
+/*对齐*/
+.table_container table, th, td
+{
+	text-align: center;
+	border-collapse: collapse;
+	border: 1px solid rgb(177, 106, 104);
+}
+.table_container td.浮点型
+{
+	text-align: right;
+}
+.table_container td, th
+{
+	min-width: 100px;
+	max-width: 100px;
+}
+.table_container td.整数型, th.整数型
+{
+	min-width: 40px;
+	max-width: 40px;
+}
+.table_container td.浮点型, th.浮点型
+{
+	min-width: 160px;
+	max-width: 160px;
+}
+.table_container td.文本型, th.文本型
+{
+	min-width: 200px;
+	max-width: 200px;
+}
+.table_container th
+{
+	height: 50px;
+}
+
+/*奇偶行变色*/
+.table_container .even, .t_head
+{
+	background: rgb(238, 211, 210)
+}
+.table_container .odd
+{
+	background: #FFF
+}
+
+/*单击变色*/
+.table_container .onClick
+{
+	background: rgb(120, 211, 210);
+}

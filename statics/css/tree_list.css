@@ -1,0 +1,21 @@
+/*
+* @Author: Administrator
+* @Date:   2017-11-14 09:09:23
+* @Last Modified by:   Administrator
+* @Last Modified time: 2017-11-17 13:00:36
+*/
+
+/* Border styles */
+/*表单群*/
+
+.tree_list ul
+{
+	list-style: none;
+	color: red;
+}
+
+.tree_list li
+{
+	list-style: none;
+	color: red;
+}

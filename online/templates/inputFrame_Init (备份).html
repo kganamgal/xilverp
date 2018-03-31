@@ -1,0 +1,449 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>立项信息详情</title>
+  <style type="text/css">
+    .selected {
+      color: maroon;
+    }
+    strong {
+      color: red;
+    }
+    .style_float{
+      text-align: right;
+    }
+    .style_percent{
+      text-align: right;
+    }
+    .style_input{
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+  <div id="id_container" class="container-fluid">
+
+    <!-- 基本资料 -->
+    <div name="Section_基本资料">
+      <div class="row clearfix">
+        <div class="col-sm-1" style="padding: 0px; margin: 0px;">
+          <h5 style="text-align: center;">基本资料</h5>
+        </div>
+        <div class="col-sm-1" style="padding: 0px; margin: 0px;">
+          <button id="id_button_基本资料" class="btn btn-default btn-edit" type="button">修改</button>
+        </div>
+      </div>
+      <div class="row clearfix" style="margin-bottom: 6px;">
+        <!-- 立项识别码 -->
+        <div class="col-sm-1" style="padding: 0px; margin: 0px;">
+          <label class="pull-right" style="font-size: 12px; padding-top: 4px; padding-right: 10px;">
+            立项识别码
+          </label>
+        </div>
+        <div class="col-sm-1" style="padding: 0px; margin: 0px;">
+          <input type="text" name="立项识别码" id="id_立项识别码" class="style_input" style="width: 100%;font-size: 12px;" />
+        </div>
+        <!-- 项目名称 -->
+        <div class="col-sm-1" style="padding: 0px; margin: 0px;">
+          <label class="pull-right" style="font-size: 12px; padding-top: 4px; padding-right: 10px;">
+            项目名称
+          </label>
+        </div>
+        <div class="col-sm-1" style="padding: 0px; margin: 0px;">
+          <input type="text" name="项目名称" id="id_项目名称" class="style_input" style="width: 100%;font-size: 12px;" />
+        </div>
+        <!-- 分项名称 -->
+        <div class="col-sm-1" style="padding: 0px; margin: 0px;">
+          <label class="pull-right" style="font-size: 12px; padding-top: 4px; padding-right: 10px;">
+            分项名称
+          </label>
+        </div>
+        <div class="col-sm-2" style="padding: 0px; margin: 0px;">
+          <input type="text" name="分项名称" id="id_分项名称" class="style_input" style="width: 100%;font-size: 12px;" />
+        </div>
+      </div>
+      <div class="row clearfix" style="margin-bottom: 6px;">
+        <!-- 立项时间 -->
+        <div class="col-sm-1" style="padding: 0px; margin: 0px;">
+          <label class="pull-right" style="font-size: 12px; padding-top: 4px; padding-right: 10px;">
+            立项时间
+          </label>
+        </div>
+        <div class="col-sm-1" style="padding: 0px; margin: 0px;">
+          <input type="date" name="立项时间" id="id_立项时间" class="style_input" style="width: 100%;font-size: 10px;" />
+        </div>
+        <!-- 立项文件名称 -->
+        <div class="col-sm-1" style="padding: 0px; margin: 0px;">
+          <label class="pull-right" style="font-size: 12px; padding-top: 4px; padding-right: 10px;">
+            立项文件名称
+          </label>
+        </div>
+        <div class="col-sm-4" style="padding: 0px; margin: 0px;">
+          <textarea type="text" name="立项文件名称" id="id_立项文件名称" class="style_input" style="resize: none; width: 100%; height: 50px; text-align: left; font-size: 12px;" />
+          </textarea>
+        </div>
+      </div>
+      <hr />
+    </div>
+
+    <!-- 父项基本资料 -->
+    <div name="Section_父项基本资料">
+      <div class="row clearfix">
+        <div class="col-sm-1" style="padding: 0px; margin: 0px;">
+          <h5 style="text-align: center;">父项基本资料</h5>
+        </div>
+        <div class="col-sm-1" style="padding: 0px; margin: 0px;">
+          <button id="id_button_父项基本资料" class="btn btn-default btn-edit" type="button">修改</button>
+        </div>
+      </div>
+      <div class="row clearfix" style="margin-bottom: 6px;">
+        <!-- 父项立项识别码 -->
+        <div class="col-sm-1" style="padding: 0px; margin: 0px;">
+          <label class="pull-right" style="font-size: 12px; padding-top: 4px; padding-right: 10px;">
+            父项立项识别码
+          </label>
+        </div>
+        <div class="col-sm-1" style="padding: 0px; margin: 0px;">
+          <input type="text" name="父项立项识别码" id="id_父项立项识别码" class="style_input" style="width: 100%;font-size: 12px;" />
+        </div>
+        <!-- 父项项目名称 -->
+        <div class="col-sm-1" style="padding: 0px; margin: 0px;">
+          <label class="pull-right" style="font-size: 12px; padding-top: 4px; padding-right: 10px;">
+            父项项目名称
+          </label>
+        </div>
+        <div class="col-sm-1" style="padding: 0px; margin: 0px;">
+          <input type="text" name="父项项目名称" id="id_父项项目名称" class="style_input" style="width: 100%;font-size: 12px;" />
+        </div>
+        <!-- 父项分项名称 -->
+        <div class="col-sm-1" style="padding: 0px; margin: 0px;">
+          <label class="pull-right" style="font-size: 12px; padding-top: 4px; padding-right: 10px;">
+            父项分项名称
+          </label>
+        </div>
+        <div class="col-sm-2" style="padding: 0px; margin: 0px;">
+          <input type="text" name="父项分项名称" id="id_父项分项名称" class="style_input" style="width: 100%;font-size: 12px;" />
+        </div>
+      </div>
+      <hr />
+    </div>
+
+    <!-- 单位资料 -->
+    <div name="Section_单位资料">
+      <!-- 第三版块 -->
+      <div class="row clearfix">
+        <div class="col-sm-1" style="padding: 0px; margin: 0px;">
+          <h5 style="text-align: center;">单位资料</h5>
+        </div>
+      </div>
+      <div class="row clearfix" style="margin-bottom: 6px;">
+        <!-- 建设单位识别码 -->
+        <div class="col-sm-1" style="padding: 0px; margin: 0px;">
+          <label class="pull-right" style="font-size: 12px; padding-top: 4px; padding-right: 10px;">
+            建设单位识别码
+          </label>
+        </div>
+        <div class="col-sm-1" style="padding: 0px; margin: 0px;">
+          <input type="text" name="建设单位识别码" id="id_建设单位识别码" class="style_input" style="width: 100%;font-size: 12px;" />
+        </div>
+        <!-- 建设单位名称 -->
+        <div class="col-sm-1" style="padding: 0px; margin: 0px;">
+          <label class="pull-right" style="font-size: 12px; padding-top: 4px; padding-right: 10px;">
+            建设单位名称
+          </label>
+        </div>
+        <div class="col-sm-4" style="padding: 0px; margin: 0px;">
+          <div class="input-group">
+            <input type="text" name="建设单位名称" id="id_建设单位名称" class="style_input" style="width: 100%;font-size: 12px;" />
+            <span class="input-group-btn"><button id="id_button_建设单位" class="btn btn-default btn-edit" type="button">修改</button></span>
+          </div>
+        </div>
+      </div>
+      <div class="row clearfix" style="margin-bottom: 6px;">
+        <!-- 代建单位识别码 -->
+        <div class="col-sm-1" style="padding: 0px; margin: 0px;">
+          <label class="pull-right" style="font-size: 12px; padding-top: 4px; padding-right: 10px;">
+            代建单位识别码
+          </label>
+        </div>
+        <div class="col-sm-1" style="padding: 0px; margin: 0px;">
+          <input type="text" name="代建单位识别码" id="id_代建单位识别码" class="style_input" style="width: 100%;font-size: 12px;" />
+        </div>
+        <!-- 代建单位名称 -->
+        <div class="col-sm-1" style="padding: 0px; margin: 0px;">
+          <label class="pull-right" style="font-size: 12px; padding-top: 4px; padding-right: 10px;">
+            代建单位名称
+          </label>
+        </div>
+        <div class="col-sm-4" style="padding: 0px; margin: 0px;">
+          <div class="input-group">
+            <input type="text" name="代建单位名称" id="id_代建单位名称" class="style_input" style="width: 100%;font-size: 12px;" />
+            <span class="input-group-btn"><button id="id_button_代建单位" class="btn btn-default btn-edit" type="button">修改</button></span>
+          </div>
+        </div>
+      </div>
+      <hr />
+    </div>
+
+    <!-- 概算资料 -->
+    <div name="Section_概算资料">
+      <div class="row clearfix">
+        <div class="col-sm-1" style="padding: 0px; margin: 0px;">
+          <h5 style="text-align: center;">概算资料</h5>
+        </div>
+        <div class="col-sm-1" style="padding: 0px; margin: 0px;">
+          <button id="id_button_概算资料" class="btn btn-default btn-edit" type="button">修改</button>
+        </div>
+      </div>
+      <div class="row clearfix" style="margin-bottom: 6px;">
+        <!-- 项目概算 -->
+        <div class="col-sm-1" style="padding: 0px; margin: 0px;">
+          <label class="pull-right" style="font-size: 12px; padding-top: 4px; padding-right: 10px;">
+            项目概算
+          </label>
+        </div>
+        <div class="col-sm-2" style="padding: 0px; margin: 0px;">
+          <input type="text" name="项目概算" id="id_项目概算" class="style_float" style="width: 100%;font-size: 12px;" />
+        </div>
+        <!-- 父项项目概算 -->
+        <div class="col-sm-1" style="padding: 0px; margin: 0px;">
+          <label class="pull-right" style="font-size: 12px; padding-top: 4px; padding-right: 10px;">
+            父项项目概算
+          </label>
+        </div>
+        <div class="col-sm-1" style="padding: 0px; margin: 0px;">
+          <input type="text" name="父项项目概算" id="id_父项项目概算" class="style_float" style="width: 100%;font-size: 12px;" />
+        </div>
+        <!-- 项目概算上限 -->
+        <div class="col-sm-1" style="padding: 0px; margin: 0px;">
+          <label class="pull-right" style="font-size: 12px; padding-top: 4px; padding-right: 10px;">
+            项目概算上限
+          </label>
+        </div>
+        <div class="col-sm-1" style="padding: 0px; margin: 0px;">
+          <input type="text" name="项目概算上限" id="id_项目概算上限" class="style_float" style="width: 100%;font-size: 12px;" />
+        </div>
+      </div>
+      <div class="row clearfix" style="margin-bottom: 6px;">
+        <!-- 已分配概算 -->
+        <div class="col-sm-1" style="padding: 0px; margin: 0px;">
+          <label class="pull-right" style="font-size: 12px; padding-top: 4px; padding-right: 10px;">
+            已分配概算
+          </label>
+        </div>
+        <div class="col-sm-2" style="padding: 0px; margin: 0px;">
+          <input type="text" name="已分配概算" id="id_已分配概算" class="style_float" style="width: 100%;font-size: 12px;" />
+        </div>
+        <!-- 未分配概算 -->
+        <div class="col-sm-1" style="padding: 0px; margin: 0px;">
+          <label class="pull-right" style="font-size: 12px; padding-top: 4px; padding-right: 10px;">
+            未分配概算
+          </label>
+        </div>
+        <div class="col-sm-1" style="padding: 0px; margin: 0px;">
+          <input type="text" name="未分配概算" id="id_未分配概算" class="style_float" style="width: 100%;font-size: 12px;" />
+        </div>
+        <!-- 概算分配比 -->
+        <div class="col-sm-1" style="padding: 0px; margin: 0px;">
+          <label class="pull-right" style="font-size: 12px; padding-top: 4px; padding-right: 10px;">
+            概算分配比
+          </label>
+        </div>
+        <div class="col-sm-1" style="padding: 0px; margin: 0px;">
+          <input type="text" name="概算分配比" id="id_概算分配比" class="style_percent" style="width: 100%;font-size: 12px;" />
+        </div>
+      </div>
+      <hr />
+    </div>
+
+    <!-- 其他资料 -->
+    <div name="Section_其他资料">
+      <div class="row clearfix">
+        <div class="col-sm-1" style="padding: 0px; margin: 0px;">
+          <h5 style="text-align: center;">其他资料</h5>
+        </div>
+        <div class="col-sm-1" style="padding: 0px; margin: 0px;">
+          <button id="id_button_其他资料" class="btn btn-default btn-edit" type="button">修改</button>
+        </div>
+      </div>
+      <div class="row clearfix" style="margin-bottom: 6px;">
+        <!-- 立项备注 -->
+        <div class="col-sm-1" style="padding: 0px; margin: 0px;">
+          <label class="pull-right" style="font-size: 12px; padding-top: 4px; padding-right: 10px;">
+            立项备注
+          </label>
+        </div>
+        <div class="col-sm-6" style="padding: 0px; margin: 0px;">
+          <textarea type="text" name="立项备注" id="id_立项备注" class="style_text" style="resize: none; width: 100%; height: 100px; text-align: left; font-size: 12px;" />
+          </textarea>
+        </div>
+      </div>
+      <hr />
+    </div>
+
+    <!-- 按钮组 -->
+    <div class="row clearfix" style="margin-top: 4px;">
+      <div class="btn-toolbar" role="toolbar" style="float: left;">
+        <button class="btn btn-default btn-01 btn-bottom" id="id_btn_Attach">查看附件</button>
+        <button class="btn btn-default btn-01 btn-bottom" id="id_btn_Table" >生成表格</button>
+        <button class="btn btn-default btn-01 btn-bottom" id="id_btn_Save"  >保存</button>
+        <button class="btn btn-default btn-01 btn-bottom" id="id_btn_Cancel">取消</button>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Jquery组件引用 -->
+  <script src="/statics/js/jquery.min.js"></script>
+  <!-- bootstrap组件引用 -->
+  <link rel="stylesheet" href="/statics/css/bootstrap.min.css">
+  <script src="/statics/js/bootstrap.min.js"></script>
+  <!-- bootstrap-table组件引用 -->
+  <link rel="stylesheet" href="/statics/css/bootstrap-table.css">
+  <script src="/statics/js/bootstrap-table.min.js"></script>
+  <script src="/statics/js/bootstrap-table-zh-CN.js"></script>
+  <!-- layer -->
+  <script type="text/javascript" src="/statics/js/layer.js"></script>
+  <!-- edwin常用函数集合 -->
+  <script type="text/javascript" src="/statics/js/often_by_Edwin_201712182301.js"></script>
+
+  <script type="text/javascript">
+    $.ajaxSetup({
+      data: {
+        csrfmiddlewaretoken: '{{ csrf_token }}'
+      },
+    });
+
+    var child_data = {};
+    var dict_Chn_Eng = {
+      '单位': 'Company',
+      '立项': 'Init',
+      '招标': 'Bidding',
+      '合同': 'Contract',
+      '变更': 'Alteration',
+      '分包合同': 'SubContract',
+      '预算': 'Budget',
+      '付款': 'Payment',
+    };
+    var key_frame = parent.child_data['key_table'];
+    var data_head = parent.child_data['data_head'];
+    var data_type = parent.child_data['data_type'];
+    var data_value = parent.child_data['data_value'];
+    var data_head_type = twoListToOneDict(data_head, data_type);
+    $(main);
+
+    function main() {
+      // 初次加载页面
+      $(window).load(windowOnLoad);
+    }
+
+    function windowOnLoad() {
+      // 绘制表单
+      var composing = [
+        {
+          'section_word':   '基本资料',
+          'section_btn':    true,
+          'key_word':       ['立项识别码',    '项目名称',     '分项名称',],
+          'input_type':     ['text',         'text',       'text',],
+          'input_width':    [1,              1,             2,],
+          'input_height':   [null,           null,          null,],
+          'font_size':      [12,             12,            12,],
+          'edit_btn':       [false,          false,         false,],
+        },
+      ];
+
+      var div_forms = $('#id_container');
+      div_forms.empty();
+      var i, j, div_section, html_sectionHead, html_row, html_unit;
+      var section_word, section_btn;
+      var key_word, input_type, input_width, input_height, font_size, edit_btn;
+
+      for (i = 0; i < composing.length; i++) {    // 遍历composing数组
+        // 建立section头
+        section_word = composing[i].section_word;
+        section_btn = composing[i].section_btn;
+        div_section = $('<div name="Section_'+section_word+'"></div>');
+        if (section_btn) {
+          html_sectionHead = $('<div class="row clearfix"><div class="col-sm-1" style="padding: 0px; margin: 0px;"><h5 style="text-align: center;">'+section_word+'</h5></div><div class="col-sm-1" style="padding: 0px; margin: 0px;"><button id="id_button_'+section_word+'" class="btn btn-default btn-edit" type="button">修改</button></div></div>');
+        }else{
+          html_sectionHead = $('<div class="row clearfix"><div class="col-sm-1" style="padding: 0px; margin: 0px;"><h5 style="text-align: center;">'+section_word+'</h5></div></div>');
+        };
+        div_section.append(html_sectionHead);
+        // 遍历每一行
+        html_row = $('<div class="row clearfix" style="margin-bottom: 6px;"></div>');
+        for (j = 0; j < composing[i].key_word.length; j++) {
+          key_word     = composing[i].key_word[j];
+          input_type   = composing[i].input_type[j];
+          input_width  = composing[i].input_width[j];
+          input_height = composing[i].input_height[j];
+          font_size    = composing[i].font_size[j];
+          edit_btn     = composing[i].edit_btn[j];
+          if (input_type == 'text' || input_type == 'date') {   // 对一般文本/日期 表单
+            html_unit = $('<div class="col-sm-1" style="padding: 0px; margin: 0px;"><label class="pull-right" style="font-size: 12px; padding-top: 4px; padding-right: 10px;">'+key_word+'</label></div>');
+            html_row.append(html_unit);
+            if (edit_btn) {   // 附带<修改>按钮时
+              html_unit = $('<div class="input-group"><input type="'+input_type+'" name="''+key_word+''" id="id_''+key_word+''" class="style_input" style="width: 100%;font-size: '+font_size+'px;" /><span class="input-group-btn"><button id="id_button_'+key_word+'" class="btn btn-default btn-edit" type="button">修改</button></span></div>');
+              html_unit = $('<p>123</p>');
+            }else{    // 不带<修改>按钮时
+              html_unit = '<div class="col-sm-'+input_width+'" style="padding: 0px; margin: 0px;"><input type="text" name="'+key_word+'" id="id_'+key_word+'" class="style_input" style="width: 100%;font-size: '+font_size+'px;" /></div>';
+            };
+            // 将html添加进行
+            html_row.append(html_unit);
+          }else if (input_type == 'textarea') {   // 对富文本表单
+            html_unit = $('<div class="col-sm-1" style="padding: 0px; margin: 0px;"><label class="pull-right" style="font-size: 12px; padding-top: 4px; padding-right: 10px;">'+key_word+'</label></div><div class="col-sm-'+input_width+'" style="padding: 0px; margin: 0px;"><textarea type="text" name="'+key_word+'" id="id_'+key_word+'" class="style_text" style="resize: none; width: 100%; height: '+input_height+'; text-align: left; font-size: '+font_size+'px;" /></textarea></div>');
+            // 将html添加进行
+            html_row.append(html_unit);
+          }else if (input_type == 'nextLine'){    // 对换行符
+            div_section.append(html_row);
+            // 另起一行
+            html_row = $('<div class="row clearfix" style="margin-bottom: 6px;"></div>');
+          };
+        };
+        div_section.append(html_row);
+        // 下划线
+        div_section.append($('<hr />'));
+      };
+      div_forms.append(div_section);
+
+      // 数据呈现控件
+      for (var key in data_head_type) {
+        // 格式化数据
+        var input_value = data_value[key];
+        if ((!input_value && typeof(input_value) != "undefined" && input_value != 0)) {
+          input_value = '';
+        } else if (data_head_type[key] == '浮点型') {
+          input_value = toThousands(input_value);
+        } else if (data_head_type[key] == '百分比') {
+          input_value = toPercents(input_value);
+        }
+        // 填充数值
+        $('#id_' + key).val(input_value);
+      }
+      // 将修改按钮设为不可用
+      $('.btn-edit,.btn-bottom').attr('disabled', 'disabled');
+      // 将input和textarea设为不可用
+      $('input,textarea').attr('readonly', 'readonly');
+      // 为各按钮注册事件
+      // 查看附件
+      $('#id_btn_Attach').removeAttr('disabled');
+      $(document).on('click', '#id_btn_Attach', function() {
+        child_data['key_frame'] = key_frame;
+        var UDID = $('input')[0].value;
+        child_data['UDID'] = UDID;
+        var key_url = dict_Chn_Eng[child_data['key_frame']];
+        var content_url = "{% url 'attachFrame' 'ewhuvlk' %}"
+        // 打开查看附件框架
+        layer.open({
+          type: 2,
+          title: '查看' + key_frame + '附件详情',
+          area: ['100%', '100%'],
+          content: content_url.replace('ewhuvlk', key_url),
+        });
+      });
+    }
+  </script>
+
+</body>
+</html>

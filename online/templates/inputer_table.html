@@ -1,0 +1,853 @@
+<!-- 添加右键菜单 http://blog.csdn.net/zlts000/article/details/50629431（使用bootstrap-menu） -->
+
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>树表联动</title>
+  <style type="text/css">
+    .selected {
+      color: maroon !important;
+    }
+    strong {
+      color: red !important;
+    }
+    .btn-01{
+      height: 50px !important;
+      margin: 5px 0px 0px 0px !important;
+    }
+    input{
+      height: 30px !important;
+    }
+    tr{
+      font-size: 13px !important;
+    }
+    th{
+      font-weight: bold !important;
+    }
+  </style>
+</head>
+<body>
+  <!-- 自定义工具栏 -->
+  <div id="id_tool_bar" class="bar">
+    <input id="id_conditional_search" type="text" style="" placeholder="条件搜索">
+    <div class="btn-group">
+        <button id="id_btn_New" type="button" class="btn btn-default" disabled="disabled">新建</button>
+        <button id="id_btn_View" type="button" class="btn btn-default" disabled="disabled">查看</button>
+        <button type="button" class="btn btn-default" disabled="disabled" disabled="disabled">删除</button>
+        <button id="id_btn_Export" type="button" class="btn btn-default" disabled="disabled">导出</button>
+    </div>
+  </div>
+
+  <div class="container-fluid">
+    <div class="row clearfix">
+      <div class="col-sm-10 column" style="padding: 0px;">
+        <!-- 表格部分 -->
+        <div class="table-responsive" style="cursor: default;">
+          <table id="id_bootstrap_table" class="table table-condensed"></table>
+        </div>
+      </div>
+      <div class="col-sm-2 column" style="padding: 0px;">
+        <!-- 树部分 -->
+        <ul id="id_zTree" class="ztree" style="flex: 1; background: white;"></ul>
+      </div>
+    </div>
+  </div>
+
+  <p id='id_JSON' hidden="hidden">{}</p>
+
+  <!-- Jquery组件引用 -->
+  <!-- <script src="/statics/js/jquery.min.js"></script> -->
+  <!-- bootstrap组件引用 -->
+  <link rel="stylesheet" href="/statics/css/bootstrap.min.css">
+  <!-- <script src="/statics/js/bootstrap.min.js"></script> -->
+  <!-- bootstrap-table组件引用 -->
+  <link rel="stylesheet" href="/statics/css/bootstrap-table.css">
+  <!-- <script src="/statics/js/bootstrap-table.min.js"></script> -->
+  <!-- <script src="/statics/js/bootstrap-table-zh-CN.js"></script> -->
+  <!-- 导出文件 -->
+  <!-- <script type="text/javascript" src="/statics/js/tableExport.min.js"></script> -->
+  <!-- layer -->
+  <!-- <script type="text/javascript" src="/statics/js/layer.js"></script> -->
+  <!-- zTree组件引用 -->
+  <link rel="stylesheet" href="/statics/css/demo.css" type="text/css">
+  <link rel="stylesheet" href="/statics/css/zTreeStyle/zTreeStyle.css" type="text/css">
+  <!-- <script type="text/javascript" src="/statics/js/jquery.ztree.core.js"></script> -->
+  <!-- edwin常用函数集合 -->
+  <!-- <link rel="stylesheet" href="/statics/css/online_20180105.css"> -->
+  <script type="text/javascript" src="/statics/js/online_20180105.js"></script>
+  <script type="text/javascript" src="/statics/js/often_by_Edwin_201712182301.js"></script>
+
+  <script type="text/javascript">
+    $.ajaxSetup({
+      data: {
+        csrfmiddlewaretoken: '{{ csrf_token }}'
+      },
+    });
+
+    var child_data = {};
+    var dict_Chn_Eng = {
+      '单位': 'Company',
+      '立项': 'Init',
+      '招标': 'Bidding',
+      '合同': 'Contract',
+      '变更': 'Alteration',
+      '分包合同': 'SubContract',
+      '预算': 'Budget',
+      '付款': 'Payment',
+    };
+    var dict_Eng_Chn = {
+      'Company': '单位',
+      'Init': '立项',
+      'Bidding': '招标',
+      'Contract': '合同',
+      'Alteration': '变更',
+      'SubContract': '分包合同',
+      'Budget': '预算',
+      'Payment': '付款',
+    };
+    var table_data;
+    // var key_table = parent.child_data['key_table'];    // 决定该项为何种信息
+    var key_table = dict_Eng_Chn[window.location.href.split('/').reverse()[0]]; // 决定该项为何种信息
+    var key_tree;
+    if (key_table in {
+        '招标': 0,
+        '合同': 0,
+        '分包合同': 0,
+        '变更': 0,
+        '付款': 0
+      }) {
+      key_tree = '立项';
+    } else {
+      key_tree = key_table;
+    }
+    $(document).attr("title", key_table + "信息");
+    $(main);
+
+    function main() {
+      // 初次加载页面
+      $(window).load(windowOnLoad);
+    }
+
+    function windowOnLoad() {
+      // ajax数据
+      // 获取表格数据
+      $.ajax({
+        url: "{% url 'ajax_table_data' %}",
+        type: 'POST',
+        data: {
+          'key_table': key_table,
+          'Init_UDID': parent.child_data['Init_UDID'],
+        },
+        success: table_postOnLoad,
+      });
+      if (key_table == '单位') {
+        $('#id_zTree').hide();
+      } else {
+        // 获取树数据
+        $.ajax({
+          url: "{% url 'ajax_tree_data' %}",
+          type: 'POST',
+          data: {
+            'key_tree': key_tree,
+            'Init_UDID': parent.child_data['Init_UDID'],
+          },
+          success: tree_postOnLoad,
+        });
+        // $.post("{% url 'ajax_tree_data' %}", {'key_tree': key_tree, 'Init_UDID': parent.child_data['Init_UDID'],}, tree_postOnLoad);
+      };
+      // 为各按钮注册事件
+      // 导出
+      $(document).on('click', '#id_btn_Export', function() {
+        // 导出表格内容成Excel
+        $('#id_bootstrap_table').tableExport({
+          type: 'excel'
+        });
+      });
+      // 新建
+      $(document).on('click', '#id_btn_New', function() {
+        child_data['data_value'] = {};
+        child_data['key_table'] = key_table;
+        child_data['behavior'] = 'New';
+        var key_url = dict_Chn_Eng[child_data['key_table']];
+        var content_url = "{% url 'inputFrame' 'ewhuvlk' %}"
+        // 打开新Frame，查看相应信息
+        layer.open({
+          type: 2,
+          title: '新建<' + key_table + '信息>详情',
+          area: ['900px', '100%'],
+          maxmin: true,
+          content: content_url.replace('ewhuvlk', key_url),
+        });
+      });
+      // 查看
+      $(document).on('click', '#id_btn_View', function() {
+        // 取得当前被选择的行信息
+        var selected_row = $(".selected");
+        var selected_id = $(selected_row[0]).attr("data-uniqueid");
+        if (!selected_id) {
+          layer.alert('请先选择一条记录');
+          return;
+        }
+        var row_data = $('#id_bootstrap_table').bootstrapTable('getRowByUniqueId', selected_id);
+        child_data['data_value'] = row_data;
+        child_data['key_table'] = key_table;
+        child_data['behavior'] = 'View';
+        var key_url = dict_Chn_Eng[child_data['key_table']];
+        var content_url = "{% url 'inputFrame' 'ewhuvlk' %}"
+        // 打开新Frame，查看相应信息
+        layer.open({
+          type: 2,
+          title: '查看<' + key_table + '信息>详情',
+          area: ['900px', '100%'],
+          maxmin: true,
+          content: content_url.replace('ewhuvlk', key_url),
+        });
+      });
+    }
+
+    function table_postOnLoad(ret) {
+      if (ret === 'No Permission') {
+        alert('您没有权限查看' + key_table + '信息');
+        return;
+      };
+      // 表格数据post回调函数
+      var datas = JSON.parse(ret.t_rows);
+      var heads = JSON.parse(ret.t_head);
+      var types = JSON.parse(ret.t_type);
+      child_data['data_head'] = heads;
+      child_data['data_type'] = types;
+
+      // 构造columns
+      // var columns = [{checkbox: true}];
+      // var columns = [{radio: true,}];
+      var columns = [];
+      for (var i in heads) {
+        if (types[i] === '浮点型') {
+          columns.push({
+            field: heads[i],
+            title: heads[i],
+            sortable: true,
+            halign: 'center',
+            align: 'right',
+            valign: 'middle',
+            searchable: true,
+            searchFormatter: false,
+            formatter: function(value, row, index) {
+              return toThousands(value);
+            },
+          })
+        } else if (types[i] === '百分比') {
+          columns.push({
+            field: heads[i],
+            title: heads[i],
+            sortable: true,
+            halign: 'center',
+            align: 'center',
+            valign: 'middle',
+            searchable: true,
+            searchFormatter: true,
+            formatter: function(value, row, index) {
+              return toPercents(value);
+            },
+          })
+        } else if (types[i] === '整数型') {
+          columns.push({
+            field: heads[i],
+            title: heads[i],
+            sortable: true,
+            halign: 'center',
+            align: 'center',
+            valign: 'middle',
+            searchable: true,
+            searchFormatter: false,
+            width: '30px',
+          })
+        } else {
+          columns.push({
+            field: heads[i],
+            title: heads[i],
+            sortable: true,
+            halign: 'center',
+            align: 'center',
+            valign: 'middle',
+            searchable: true,
+            searchFormatter: false,
+          })
+        }
+      }
+      // 计数
+      columns[0].footerFormatter = function(rows) {
+        var count = 0;
+        for (var i in rows) {
+          count += 1;
+        }
+        return '共有'+count+'条记录';
+      }
+      // 求和
+      var footer_list = [];
+      if (key_table === '合同') {
+        footer_list = ['中标价', '合同值_签订时', '合同值_最新值', '合同值_最终值'];
+      } else if (key_table === '付款') {
+        footer_list = ['本次付款额'];
+      } else if (key_table === '招标') {
+        footer_list = ['预算控制价', '中标价', '项目概算'];
+      }
+      for (var k in footer_list) {
+        var i = heads.indexOf(footer_list[k]);
+        if (i >= 0) {
+          var footer_key = footer_list[k];
+          columns[i].footerFormatter = function(rows) {
+            var sumer = 0;
+            for (var j in rows) {
+              sumer += rows[j][this.field];
+            }
+            return toThousands(sumer);
+          }
+        }
+      };
+      //.百分比求和
+      var footer_list = [];
+      if (key_table === '付款') {
+        footer_list = ['合同本次付款比',];
+      };
+      for (var k in footer_list) {
+        var i = heads.indexOf(footer_list[k]);
+        if (i >= 0) {
+          var footer_key = footer_list[k];
+          columns[i].footerFormatter = function(rows) {
+            var sumer = 0;
+            for (var j in rows) {
+              sumer += rows[j][this.field];
+            }
+            return toPercents(sumer);
+          }
+        }
+      };
+
+      $('#id_bootstrap_table').bootstrapTable('destroy'); // 销毁
+      table_data = datas;
+      $('#id_JSON').html(ret.t_rows);
+      TableInit("#id_bootstrap_table", columns, table_data); // 初始化表格
+
+      $(window).resize(function() {
+        $('#id_bootstrap_table').bootstrapTable('resetView');
+      }) // 保证表格头身联动
+
+      // 为自定义搜索框注册事件
+      $(document).on('keypress', '#id_conditional_search', function(event) {
+        text = this.value;
+        if (text.length > 0 && (event.charCode === 13 || event.charCode === 0)) { // 按下回车时
+          // 这里用新的逆波兰逻辑
+          // 构造正则表达式，用于将列名加上element的头
+          var head_pattern = '^';
+          for (i in heads) {
+            if (i > 0) {
+              head_pattern = head_pattern + '|'
+            };
+            head_pattern = head_pattern + heads[i] + '$';
+          };
+          head_pattern = RegExp(head_pattern, 'g');
+          var filtered = table_data.filter(function(element) {
+            // 深度复制一个element
+            var ele = {};
+            $.extend(ele, element);
+            var result = TablecaluByRpn(text, ele, false);
+            return result;
+          });
+
+          function TablecaluByRpn(expression, obj, printLog = false) {
+            // 预处理输入字符串，将日期替换掉
+            var tempDict = {};
+            var dateList = expression.match(/\d{4}-\d{1,2}-\d{1,2}/g);
+            if (dateList) {
+              for (var i = 0; i < dateList.length; i++) {
+                tempDict['tempObject' + i] = dateList[i];
+                expression = expression.replace(dateList[i], 'tempObject' + i);
+              };
+            };
+            // expression += '\0';
+            // 运算符优先级表
+            var dict_priority = {
+              '!': 10,
+              '^': 9,
+              '/': 8,
+              '*': 8,
+              '-': 7,
+              '+': 7,
+              '=>': 6, // 包含
+              '!>': 6, // 不包含
+              '>': 6,
+              '<': 6,
+              '>=': 6,
+              '<=': 6,
+              '=': 5,
+              '!=': 5,
+              '&&': 4,
+              '||': 3,
+              '(': 2,
+              ')': 1,
+              '\0': -1,
+            };
+            var queueExpression = new Queue(); // 建立预处理队列queueExpression用于后续运算
+            var queueOperand = new Queue(); // 建立运算数队列queueOperand用于运算数的存储
+            var stackOperator = new Stack(); // 建立运算符栈stackOperator用于运算符的存储
+            stackOperator.push('\0');
+            var i;
+            // 创建预处理队列：queueExpression
+            var pattern = ''; // 构造算符字符检测正则表达式
+            var pattern_multi = ''; // 构造多位算符字符检测正则表达式
+            var pattern_test = ''; // 构造算符匹配正则表达式
+            var pattern_multi_test = ''; // 构造多位算符匹配正则表达式
+            for (var operator in dict_priority) {
+              if (operator == '\0') {
+                break
+              };
+              pattern += (pattern.indexOf('\\' + operator[0]) >= 0) ? '' : ((pattern.length > 0) ? '|\\' : '\\') + operator[0];
+              pattern_test += ((pattern_test.length > 0) ? '|\\' : '\\') + operator[0] + ((operator.length == 2) ? '\\' + operator[1] : '');
+              if (operator.length == 2) {
+                pattern_multi += (pattern_multi.indexOf('\\' + operator[0]) >= 0) ? '' : ((pattern_multi.length > 0) ? '|\\' : '\\') + operator[0];
+                pattern_multi_test += ((pattern_multi_test.length > 0) ? '|\\' : '\\') + operator[0] + ((operator.length == 2) ? '\\' + operator[1] : '');
+              };
+            };
+            var pattern = RegExp(pattern);
+            var pattern_multi = RegExp(pattern_multi);
+            var pattern_test = RegExp(pattern_test);
+            var pattern_multi_test = RegExp(pattern_multi_test);
+            var A;
+            var B;
+            while (expression.search(pattern) >= 0) {
+              i = expression.search(pattern); // 找出运算符的位置
+              A = expression.substring(0, i).trim(); // 将运算符之前的算子提取出来，去掉两边的空格后压入预处理队列
+              if (A.length > 0) {
+                queueExpression.enqueue(A);
+              }
+              if (pattern_multi.test(expression[i]) && pattern_multi_test.test(expression.substring(i, i + 2))) { // 如果该算符有有2位的可能性，就检测这2位是否是一个算符
+                queueExpression.enqueue(expression.substring(i, i + 2)); // 将该2位运算符压入预处理队列
+                if (printLog) {
+                  console.log('检测到算符：', expression.substring(i, i + 2))
+                };
+                i++;
+              } else {
+                queueExpression.enqueue(expression[i]); // 将该1位运算符压入预处理队列
+                if (printLog) {
+                  console.log('检测到算符：', expression[i])
+                };
+              };
+              expression = expression.substring(i + 1); // 将expression截短
+            };
+            if (expression.length > 0) {
+              queueExpression.enqueue(expression.trim());
+            };
+            // 正负号前补0
+            for (i in queueExpression.dataStore) {
+              if (queueExpression.dataStore[i] == '+' || queueExpression.dataStore[i] == '-') {
+                if (i == 0) {
+                  queueExpression.dataStore.splice(0, 0, '0');
+                } else if (queueExpression.dataStore[i - 1] == '(') {
+                  queueExpression.dataStore.splice(i, 0, '0');
+                };
+              };
+            };
+            if (printLog) {
+              console.log('预处理队列：', queueExpression.dataStore)
+            };
+            // 遍历预处理队列
+            while (!queueExpression.isEmpty()) {
+              A = queueExpression.dequeue();
+              // 如果A是个运算数，就压入运算数栈
+              if (!pattern_test.test(A)) {
+                queueOperand.enqueue(A);
+                if (printLog) {
+                  console.log(`将【${A}】压入队列`)
+                };
+              }
+              // 如果A是左括号，就压入运算符栈
+              else if (A == '(') {
+                stackOperator.push(A);
+                if (printLog) {
+                  console.log(`将【${A}】压入符栈`)
+                };
+              }
+              // 如果A是右括号
+              else if (A == ')') {
+                // 如果运算符栈顶不是左括号，就将运算符栈顶的元素弹出，并压入运算数队列
+                while (stackOperator.peek() != '(') {
+                  B = stackOperator.pop();
+                  queueOperand.enqueue(B);
+                  if (printLog) {
+                    console.log(`将符栈顶元素【${B}】压入队列`)
+                  };
+                };
+                // 如果运算符栈顶是左括号，就将运算符栈顶的元素弹出
+                if (stackOperator.peek() == '(') {
+                  B = stackOperator.pop();
+                  if (printLog) {
+                    console.log(`将【${B}】踢出符栈`)
+                  };
+                };
+              }
+              // 如果A是运算符
+              else if (pattern_test.test(A)) {
+                // 当A的优先级<=运算符栈顶元素的优先级，就将运算符栈顶的元素弹出，并压入运算数队列
+                while (dict_priority[A] <= dict_priority[stackOperator.peek()]) {
+                  B = stackOperator.pop();
+                  queueOperand.enqueue(B);
+                  if (printLog) {
+                    console.log(`将符栈顶元素【${B}】压入队列`)
+                  };
+                };
+                // 当A的优先级>运算符栈顶元素的优先级，就将运算符栈顶的元素弹出
+                if (dict_priority[A] > dict_priority[stackOperator.peek()]) {
+                  stackOperator.push(A);
+                  if (printLog) {
+                    console.log(`将【${A}】压入符栈`)
+                  };
+                };
+              };
+            };
+
+            // 扫描完成后，把Operator栈的元素依次出栈，然后依次压入Operand队列中。
+            while (stackOperator.peek() != '\0') {
+              B = stackOperator.pop();
+              queueOperand.enqueue(B);
+              if (printLog) {
+                console.log(`将符栈顶元素【${B}】压入队列`)
+              };
+            };
+
+            if (printLog) {
+              console.log('逆波兰表达式为：', queueOperand.dataStore)
+            };
+
+            // 构造一个运算结果中间变量，一个运算结果栈
+            var result, fisrt_arg, second_arg;
+            var stackResult = new Stack();
+            while (!queueOperand.isEmpty()) {
+              var A = queueOperand.dequeue();
+              if (!pattern_test.test(A)) { // 如果A为算子
+                if (head_pattern.test(A)) { // 如果A为关键词，将A替换为变量
+                  A = obj[A];
+                } else if (A == '【空白】') {
+                  A = null;
+                };
+                // 将数队列中的tempObj替换回原值
+                if (A in tempDict) {
+                  A = tempDict[A];
+                };
+                stackResult.push(A);
+                if (printLog) {
+                  console.log(`将【${A}】压入结果栈`)
+                };
+              } else if (dict_priority[A] > 0) {
+                if (A == '+') { // 如果为二元算符
+                  second_arg = stackResult.pop();
+                  fisrt_arg = stackResult.pop();
+                  if (printLog) {
+                    console.log(`将【${fisrt_arg}】、【${second_arg}】弹出结果栈`)
+                  };
+                  result = accAdd(fisrt_arg, second_arg);
+                  if (printLog) {
+                    console.log(`计算【${fisrt_arg}】+【${second_arg}】=【${result}】压入结果栈`)
+                  };
+                } else if (A == '-') {
+                  second_arg = stackResult.pop();
+                  fisrt_arg = stackResult.pop();
+                  if (printLog) {
+                    console.log(`将【${fisrt_arg}】、【${second_arg}】弹出结果栈`)
+                  };
+                  result = accMinus(fisrt_arg, second_arg);
+                  if (printLog) {
+                    console.log(`计算【${fisrt_arg}】-【${second_arg}】=【${result}】压入结果栈`)
+                  };
+                } else if (A == '*') {
+                  second_arg = stackResult.pop();
+                  fisrt_arg = stackResult.pop();
+                  if (printLog) {
+                    console.log(`将【${fisrt_arg}】、【${second_arg}】弹出结果栈`)
+                  };
+                  result = accMul(fisrt_arg, second_arg);
+                  if (printLog) {
+                    console.log(`计算【${fisrt_arg}】*【${second_arg}】=【${result}】压入结果栈`)
+                  };
+                } else if (A == '/') {
+                  second_arg = stackResult.pop();
+                  fisrt_arg = stackResult.pop();
+                  if (printLog) {
+                    console.log(`将【${fisrt_arg}】、【${second_arg}】弹出结果栈`)
+                  };
+                  result = accDiv(fisrt_arg, second_arg);
+                  if (printLog) {
+                    console.log(`计算【${fisrt_arg}】/【${second_arg}】=【${result}】压入结果栈`)
+                  };
+                } else if (A == '^') {
+                  second_arg = stackResult.pop();
+                  fisrt_arg = stackResult.pop();
+                  if (printLog) {
+                    console.log(`将【${fisrt_arg}】、【${second_arg}】弹出结果栈`)
+                  };
+                  result = Math.pow(fisrt_arg, second_arg);
+                  if (printLog) {
+                    console.log(`计算【${fisrt_arg}】^【${second_arg}】=【${result}】压入结果栈`)
+                  };
+                } else if (A == '>') {
+                  second_arg = stackResult.pop();
+                  fisrt_arg = stackResult.pop();
+                  if (printLog) {
+                    console.log(`将【${fisrt_arg}】、【${second_arg}】弹出结果栈`)
+                  };
+                  result = fisrt_arg > second_arg;
+                  if (printLog) {
+                    console.log(`计算【${fisrt_arg}】>【${second_arg}】=【${result}】压入结果栈`)
+                  };
+                } else if (A == '<') {
+                  second_arg = stackResult.pop();
+                  fisrt_arg = stackResult.pop();
+                  if (printLog) {
+                    console.log(`将【${fisrt_arg}】、【${second_arg}】弹出结果栈`)
+                  };
+                  result = fisrt_arg < second_arg;
+                  if (printLog) {
+                    console.log(`计算【${fisrt_arg}】<【${second_arg}】=【${result}】压入结果栈`)
+                  };
+                } else if (A == '=') {
+                  second_arg = stackResult.pop();
+                  fisrt_arg = stackResult.pop();
+                  if (printLog) {
+                    console.log(`将【${fisrt_arg}】、【${second_arg}】弹出结果栈`)
+                  };
+                  result = fisrt_arg == second_arg;
+                  if (printLog) {
+                    console.log(`计算【${fisrt_arg}】==【${second_arg}】=【${result}】压入结果栈`)
+                  };
+                } else if (A == '>=') {
+                  second_arg = stackResult.pop();
+                  fisrt_arg = stackResult.pop();
+                  if (printLog) {
+                    console.log(`将【${fisrt_arg}】、【${second_arg}】弹出结果栈`)
+                  };
+                  result = fisrt_arg >= second_arg;
+                  if (printLog) {
+                    console.log(`计算【${fisrt_arg}】>=【${second_arg}】=【${result}】压入结果栈`)
+                  };
+                } else if (A == '<=') {
+                  second_arg = stackResult.pop();
+                  fisrt_arg = stackResult.pop();
+                  if (printLog) {
+                    console.log(`将【${fisrt_arg}】、【${second_arg}】弹出结果栈`)
+                  };
+                  result = fisrt_arg <= second_arg;
+                  if (printLog) {
+                    console.log(`计算【${fisrt_arg}】<=【${second_arg}】=【${result}】压入结果栈`)
+                  };
+                } else if (A == '!=') {
+                  second_arg = stackResult.pop();
+                  fisrt_arg = stackResult.pop();
+                  if (printLog) {
+                    console.log(`将【${fisrt_arg}】、【${second_arg}】弹出结果栈`)
+                  };
+                  result = fisrt_arg != second_arg;
+                  if (printLog) {
+                    console.log(`计算【${fisrt_arg}】!=【${second_arg}】=【${result}】压入结果栈`)
+                  };
+                } else if (A == '&&') {
+                  second_arg = stackResult.pop();
+                  fisrt_arg = stackResult.pop();
+                  if (printLog) {
+                    console.log(`将【${fisrt_arg}】、【${second_arg}】弹出结果栈`)
+                  };
+                  result = fisrt_arg && second_arg;
+                  if (printLog) {
+                    console.log(`计算【${fisrt_arg}】AND【${second_arg}】=【${result}】压入结果栈`)
+                  };
+                } else if (A == '||') {
+                  second_arg = stackResult.pop();
+                  fisrt_arg = stackResult.pop();
+                  if (printLog) {
+                    console.log(`将【${fisrt_arg}】、【${second_arg}】弹出结果栈`)
+                  };
+                  result = fisrt_arg || second_arg;
+                  if (printLog) {
+                    console.log(`计算【${fisrt_arg}】OR【${second_arg}】=【${result}】压入结果栈`)
+                  };
+                } else if (A == '=>') {
+                  second_arg = stackResult.pop();
+                  fisrt_arg = stackResult.pop();
+                  if (printLog) {
+                    console.log(`将【${fisrt_arg}】、【${second_arg}】弹出结果栈`)
+                  };
+                  result = contain(fisrt_arg, second_arg);
+                  if (printLog) {
+                    console.log(`计算【${fisrt_arg}】包含【${second_arg}】=【${result}】压入结果栈`)
+                  };
+                } else if (A == '!>') {
+                  second_arg = stackResult.pop();
+                  fisrt_arg = stackResult.pop();
+                  if (printLog) {
+                    console.log(`将【${fisrt_arg}】、【${second_arg}】弹出结果栈`)
+                  };
+                  result = !contain(fisrt_arg, second_arg);
+                  if (printLog) {
+                    console.log(`计算【${fisrt_arg}】不包含【${second_arg}】=【${result}】压入结果栈`)
+                  };
+                }
+                //以下为一元算符
+                else if (A == '!') {
+                  fisrt_arg = stackResult.pop();
+                  if (printLog) {
+                    console.log(`将【${fisrt_arg}】弹出结果栈`)
+                  };
+                  result = !fisrt_arg;
+                  if (printLog) {
+                    console.log(`计算NOT 【${fisrt_arg}】=【${result}】压入结果栈`)
+                  };
+                }
+
+                stackResult.push(result);
+              }
+            };
+
+            if (printLog) {
+              console.log(`最终结果为：【${stackResult.peek()}】`)
+            };
+            return stackResult.peek();
+          };
+          // 重新加载表格数据
+          $('#id_bootstrap_table').bootstrapTable('load', filtered);
+        };
+      });
+
+    }
+
+    function tree_postOnLoad(ret) {
+      // 树数据post回调函数
+      var zTreeObj;
+      // zTree 的参数配置，深入使用请参考 API 文档（setting 配置详解）
+      var setting = {
+        data: { //表示tree的数据格式
+          simpleData: {
+            enable: true, //表示使用简单数据模式
+            idKey: "Id", //设置之后id为在简单数据模式中的父子节点关联的桥梁
+            pIdKey: "PId", //设置之后pid为在简单数据模式中的父子节点关联的桥梁和id互相对应
+            rootPId: "null" //pid为null的表示根节点
+          }
+        },
+
+        view: { //表示tree的显示状态
+          selectMulti: false, //表示禁止多选
+          expandSpeed: "fast",
+          dblClickExpand: false, // 取消双击展开节点
+        },
+
+        check: { //表示tree的节点在点击时的相关设置
+          enable: true, //是否显示radio/checkbox
+          chkStyle: "checkbox", //值为checkbox或者radio表示
+          checkboxType: {
+            p: "",
+            s: ""
+          }, //表示父子节点的联动效果
+          radioType: "level" //设置tree的分组
+        },
+
+        callback: {
+          onDblClick: function(event, treeId, treeNode) {
+            Init_UDID = treeNode.Id;
+            // 获取表格数据
+            $.ajax({
+              url: "{% url 'ajax_table_data' %}",
+              type: 'POST',
+              data: {
+                'key_table': key_table,
+                'Init_UDID': Init_UDID,
+              },
+              success: function(ret) {
+                table_data = JSON.parse(ret.t_rows);        // 读取该项及该项子孙数据
+                $('#id_JSON').html(ret.t_rows);    // 将数据转成JSON后存进<p></p>
+                $('#id_bootstrap_table').bootstrapTable('load', table_data);      // 加载进表格
+                $(".selected").removeClass("selected");
+                $("[data-uniqueid='"+ret.t_UDID+"']").addClass("selected");      // 选中该行
+              },
+            });
+          }
+        },
+      }
+      // zTree 的数据属性，深入使用请参考 API 文档（zTreeNode 节点数据详解）
+      var zNodes = ret;
+      if (key_table != '单位') {
+        zTreeObj = $.fn.zTree.init($("#id_zTree"), setting, zNodes);
+        var nodes = zTreeObj.getNodesByParam("Id", parent.child_data['Init_UDID']);
+        zTreeObj.selectNode(nodes[0]);
+      }
+    }
+
+    function TableInit(id_table, table_colum, t_data) {
+      // 表格初始化
+      $(id_table).bootstrapTable({
+        data: t_data,
+        cache: false,
+        height: 600,
+        toolbar: '#id_tool_bar',
+        sortable: true,
+        sortOrder: "asc",
+        showColumns: true,
+        showRefresh: true,
+        minimumCountColumns: 2,
+        singleSelect: true,
+        clickToSelect: true,
+        uniqueId: key_table + "识别码",
+        showToggle: true,
+        cardView: false,
+        detailView: false,
+        columns: table_colum,
+        search: true,
+        showFooter: true,
+        // showExport: true,                     //是否显示导出
+        // exportDataType: "all",              //basic', 'all', 'selected'.
+        // ~/Content/bootstrap-table/extensions/export/bootstrap-table-export.js"
+        // rawgit.com/hhurz/tableExport.jquery.plugin/master/tableExport.js"
+        searchOnEnterKey: false,
+        onClickRow: function(row, $element) {
+          $(".selected").removeClass("selected");
+          $($element).addClass("selected");
+          // 将树表完全折叠并取消选择，再选择现在点选的行
+          try {
+            var treeObj = $.fn.zTree.getZTreeObj('id_zTree');
+            var UDID = row["立项识别码"] || row["预算识别码"];
+            var nodes = treeObj.getNodesByParam("Id", UDID);
+            treeObj.selectNode(nodes[0]);
+          } catch (e) {};
+        },
+        onRefresh: function() {
+          $.ajax({
+            url: "{% url 'ajax_table_data' %}",
+            type: 'POST',
+            data: {
+              'key_table': key_table,
+            },
+            success: function(ret) {
+              // 重新获取表格数据并刷新表格，同时将该数据存入<p></p>
+              table_data = JSON.parse(ret.t_rows);
+              $('#id_JSON').html(ret.t_rows);
+              $(id_table).bootstrapTable('load', table_data);
+              // 将树表完全折叠并取消选择
+              try {
+                var treeObj = $.fn.zTree.getZTreeObj('id_zTree');
+                treeObj.expandAll(false);
+                treeObj.cancelSelectedNode();
+              } catch (e) {};
+              // 清空搜索框
+              $('#id_conditional_search').val('');
+            },
+          });
+        },
+      })
+    }
+
+    function contain(text, reg) {
+      return (text || '').indexOf(reg || '') >= 0;
+    };
+  </script>
+
+</body>
+</html>

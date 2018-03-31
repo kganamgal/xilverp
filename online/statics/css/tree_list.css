@@ -1,0 +1,36 @@
+/*
+* @Author: Administrator
+* @Date:   2017-11-14 09:09:23
+* @Last Modified by:   Administrator
+* @Last Modified time: 2017-11-20 13:54:57
+*/
+
+/* Border styles */
+/*表单群*/
+
+.tree_list ul, li
+{
+	list-style: none;
+	font-size: 12px;
+	font-family: Verdana;
+	cursor: default;
+}
+
+.tree_list .onClick
+{
+	background: rgb(120, 211, 210);
+}
+
+#id_div_tree_list
+{
+    /*border: 1px solid #ddd;*/
+    width: 250px;
+    height: 700px;
+	/*position: relative;*/
+    overflow: auto;
+}
+
+.horizontal
+{ 
+	display: inline-block;
+} 

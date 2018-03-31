@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+	<head>
+	    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	    <title>新城镇公司工程合同管理系统</title>
+	    <link rel="stylesheet" type="text/css" href="/statics/css/login.css">
+	</head>
+
+	<body>
+		<!-- Jquery组件引用 -->
+		<script src="http://cdn.static.runoob.com/libs/jquery/2.1.1/jquery.min.js"></script>
+		<!-- bootstrap组件引用 -->
+		<link rel="stylesheet" href="http://cdn.static.runoob.com/libs/bootstrap/3.3.7/css/bootstrap.min.css">
+		<script src="/statics/js/bootstrap.min.js"></script>
+
+		<div>
+			<br />
+			<h1>工程合同管理系统</h1>
+			<form method='post' enctype="multipart/form-data">
+			    {% csrf_token %}
+			    {{uf.as_p}}
+			    <input class="submit" type="submit" value="点击登陆" />
+			</form>
+			<a href="http://127.0.0.1:8000/online/regist/">修改密码</a>
+			<br />
+			<br />
+	    </div>
+	</body>
+</html>

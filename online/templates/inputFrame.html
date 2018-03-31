@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>表单群</title>
+  <style type="text/css">
+    .selected {
+      color: maroon;
+    }
+    strong {
+      color: red;
+    }
+    .style_float{
+      text-align: right;
+    }
+    .style_percent{
+      text-align: right;
+    }
+    .style_input{
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+  <div id="id_container" class="container-fluid"></div>
+
+  <!-- Jquery组件引用 -->
+  <!-- <script src="/statics/js/jquery.min.js"></script> -->
+  <!-- bootstrap组件引用 -->
+  <!-- <link rel="stylesheet" href="/statics/css/bootstrap.min.css"> -->
+  <!-- <script src="/statics/js/bootstrap.min.js"></script> -->
+  <!-- bootstrap-table组件引用 -->
+  <!-- <link rel="stylesheet" href="/statics/css/bootstrap-table.css"> -->
+  <!-- <script src="/statics/js/bootstrap-table.min.js"></script> -->
+  <!-- <script src="/statics/js/bootstrap-table-zh-CN.js"></script> -->
+  <!-- layer -->
+  <!-- <script type="text/javascript" src="/statics/js/layer.js"></script> -->
+  <!-- edwin常用函数集合 -->
+  <link rel="stylesheet" href="/statics/css/online_20180104.css">
+  <script type="text/javascript" src="/statics/js/online_20180104.js"></script>
+  <script type="text/javascript" src="/statics/js/often_by_Edwin_201712182301.js"></script>
+
+  <script type="text/javascript">
+    $.ajaxSetup({
+      data: {
+        csrfmiddlewaretoken: '{{ csrf_token }}'
+      },
+    });
+
+    var child_data = {};
+    var dict_Chn_Eng = {
+      '单位': 'Company',
+      '立项': 'Init',
+      '招标': 'Bidding',
+      '合同': 'Contract',
+      '变更': 'Alteration',
+      '分包合同': 'SubContract',
+      '预算': 'Budget',
+      '付款': 'Payment',
+    };
+    var key_frame = parent.child_data['key_table'];
+    var data_head = parent.child_data['data_head'];
+    var data_type = parent.child_data['data_type'];
+    var data_value = parent.child_data['data_value'];
+    var data_head_type = twoListToOneDict(data_head, data_type);
+    $(main);
+
+    function main() {
+      // 初次加载页面
+      $(window).load(windowOnLoad);
+    }
+
+    function windowOnLoad() {
+      // 根据data_head_type的内容生成input
+      var div_forms = $('#id_container');
+      div_forms.empty();
+      //添加新的一行
+      var div_row_forms = $('<div class=\"row clearfix\" style=\"margin-bottom: 6px;\">');
+      div_forms.append(div_row_forms);
+      //每行加三列内容
+      var i = 0;
+      var label;
+      var form;
+      var div_col_forms;
+      // 数据呈现控件
+      for (var key in data_head_type) {
+        // 格式化数据
+        var input_value = data_value[key];
+        if ((!input_value && typeof(input_value) != "undefined" && input_value != 0)) {
+          input_value = '';
+        } else if (data_head_type[key] == '浮点型') {
+          input_value = toThousands(input_value);
+        } else if (data_head_type[key] == '百分比') {
+          input_value = toPercents(input_value);
+        }
+        // 构造数据容器
+        div_col_forms = $('<div class=\"col-lg-1\" style=\"padding: 0px; margin: 0px;\"></div>');
+        label = $('<label style=\"font-size: 12px; padding-top: 4px; float: right;\">' + key + '&nbsp</label>');
+        div_col_forms.append(label);
+        div_row_forms.append(div_col_forms);
+        div_col_forms = $('<div class=\"col-lg-3\" style=\"padding: 0px; margin: 0px;\"></div>');
+        if (data_head_type[key] == '文本型') {
+          form = $('<textarea type=\"text\" name=\"' + key + '\" rows=\"3\" id=\"id_' + key + '\" disabled=\"disabled\" class=\"style_text\" style=\"width: 100%;font-size: 12px;\">' + input_value + '</textarea>');
+        } else if (data_head_type[key] == '浮点型') { // 这里使用了input-group，在文本框的最后加上了<修改>按钮
+          form = $('<div class=\"input-group\"><input type=\"text\" name=\"' + key + '\" id=\"id_' + key + '\" disabled=\"disabled\" class=\"style_float\" style=\"width: 100%;font-size: 12px;\" value=\"' + input_value + '\" /><span class=\"input-group-btn\"><button id=\"id_button_' + key + '\" class=\"btn btn-default\" type=\"button\">修改</button></span></div>');
+        } else if (data_head_type[key] == '百分比') {
+          form = $('<div class=\"input-group\"><input type=\"text\" name=\"' + key + '\" id=\"id_' + key + '\" disabled=\"disabled\" class=\"style_percent\" style=\"width: 100%;font-size: 12px;\" value=\"' + input_value + '\" /><span class=\"input-group-btn\"><button id=\"id_button_' + key + '\" class=\"btn btn-default\" type=\"button\">修改</button></span></div>');
+        } else {
+          form = $('<div class=\"input-group\"><input type=\"text\" name=\"' + key + '\" id=\"id_' + key + '\" disabled=\"disabled\" class=\"style_input\" style=\"width: 100%;font-size: 12px;\" value=\"' + input_value + '\" /><span class=\"input-group-btn\"><button id=\"id_button_' + key + '\" class=\"btn btn-default\" type=\"button\">修改</button></span></div>');
+        }
+        // if (data_head_type[key] in {
+        //     '浮点型': 0,
+        //     '百分比': 0
+        //   }) {
+        //   form.css('text-align', 'right');
+        // };
+        div_col_forms.append(form);
+        div_row_forms.append(div_col_forms);
+        if (i < 2) {
+          i++;
+        } else {
+          i = 0;
+          div_row_forms = $('<div class=\"row clearfix\" style=\"margin-bottom: 6px;\">');
+          div_forms.append(div_row_forms);
+        }
+      }
+      // 按钮组
+      var div_row_forms = $('<div class=\"row clearfix\" style=\"margin-top: 4px;\">');
+      div_forms.append(div_row_forms);
+      var div_btn_toolbar = $('<div class=\"btn-toolbar\" role=\"toolbar\" style=\"float: right;\"></div>');
+      div_row_forms.append($(div_btn_toolbar));
+      div_btn_toolbar.append($('<button class=\"btn btn-default btn-01\" style=\"\" type=\"button\" id=\"id_btn_New\" disabled=\"disabled\"   >新建</    button>'));
+      div_btn_toolbar.append($('<button class=\"btn btn-default btn-01\" style=\"\" type=\"button\" id=\"id_btn_Edit\" disabled=\"disabled\"  >修改</    button>'));
+      div_btn_toolbar.append($('<button class=\"btn btn-default btn-01\" style=\"\" type=\"button\" id=\"id_btn_Delete\" disabled=\"disabled\">删除</    button>'));
+      div_btn_toolbar.append($('<button class=\"btn btn-default btn-01\" style=\"\" type=\"button\" id=\"id_btn_Attach\"                      >查看附件</button>'));
+      div_btn_toolbar.append($('<button class=\"btn btn-default btn-01\" style=\"\" type=\"button\" id=\"id_btn_Table\" disabled=\"disabled\" >生成表格</button>'));
+      div_btn_toolbar.append($('<button class=\"btn btn-default btn-01\" style=\"\" type=\"button\" id=\"id_btn_Save\" disabled=\"disabled\"  >保存</    button>'));
+      div_btn_toolbar.append($('<button class=\"btn btn-default btn-01\" style=\"\" type=\"button\" id=\"id_btn_Cancel\" disabled=\"disabled\">取消</    button>'));
+      // 为各按钮注册事件
+      // 查看附件
+      $(document).on('click', '#id_btn_Attach', function() {
+        child_data['key_frame'] = key_frame;
+        var UDID = $('input')[0].value;
+        child_data['UDID'] = UDID;
+        var key_url = dict_Chn_Eng[child_data['key_frame']];
+        var content_url = "{% url 'attachFrame' 'ewhuvlk' %}"
+        // 打开查看附件框架
+        layer.open({
+          type: 2,
+          title: '查看' + key_frame + '附件详情',
+          area: ['100%', '100%'],
+          content: content_url.replace('ewhuvlk', key_url),
+        });
+      });
+    }
+  </script>
+
+</body>
+</html>
