@@ -84,14 +84,14 @@
     }, {
       'section_word': '招标情况简介',
       'section_btn': true,
-      'key_word': ['招标简介', 'nextLine', '投标单位',],
-      'short_key': [null, 'nextLine', null,],
-      'input_type': ['textarea', 'nextLine', 'textarea',],
-      'value_type': ['text', 'nextLine', 'text',],
-      'input_width': [6, 'nextLine', 6,],
-      'input_height': [100, 'nextLine', 100,],
-      'font_size': [12, 'nextLine', 12,],
-      'edit_btn': [false, 'nextLine', false,],
+      'key_word': ['招标简介',],
+      'short_key': [null,],
+      'input_type': ['textarea',],
+      'value_type': ['text',],
+      'input_width': [6,],
+      'input_height': [100,],
+      'font_size': [12,],
+      'edit_btn': [false,],
     }, {
       'section_word': '立项资料',
       'section_btn': true,
@@ -114,6 +114,17 @@
       'input_height': [null, null, 'nextLine', null, null, 'nextLine', null, null, 'nextLine', null, null, 'nextLine', null, null, ],
       'font_size': [12, 12, 'nextLine', 12, 12, 'nextLine', 12, 12, 'nextLine', 12, 12, 'nextLine', 12, 12, ],
       'edit_btn': [false, true, 'nextLine', false, true, 'nextLine', false, true, 'nextLine', false, false, 'nextLine', false, false, ],
+    }, {
+      'section_word': '投标单位情况',
+      'section_btn': true,
+      'key_word': ['投标单位',],
+      'short_key': [null,],
+      'input_type': ['textarea',],
+      'value_type': ['text',],
+      'input_width': [6,],
+      'input_height': [100,],
+      'font_size': [12,],
+      'edit_btn': [false,],
     }, {
       'section_word': '财务资料',
       'section_btn': false,
@@ -501,7 +512,7 @@
           '招标方式',
         ];
         var inputer_form_type = [ // 对应的输入类型
-          ['政府监管公开招标', '集团组织公开招标', '集团组织邀请招标', '竞争性谈判', '竞争性磋商', '询价', '自行采购', '其他'],
+          ['政府监管公开招标', '集团组织公开招标', '集团组织邀请招标', '竞争性谈判', '竞争性磋商', '询价', '单一来源', '自行采购', '其他'],
         ];
         call_inputer(inputer_labels, inputer_form_type);
       });
@@ -511,6 +522,20 @@
         // 2.进行业务逻辑
         var inputer_labels = [ // 需要接受用户修改的项
           '招标简介',
+        ];
+        var inputer_form_type = [ // 对应的输入类型
+          'text',
+        ];
+        call_inputer(
+          inputer_labels,
+          inputer_form_type);
+      });
+      // 修改投标单位情况简介
+      $(document).on('click', '#id_button_投标单位情况', function() {
+        // 1.检查有无权限
+        // 2.进行业务逻辑
+        var inputer_labels = [ // 需要接受用户修改的项
+          '投标单位',
         ];
         var inputer_form_type = [ // 对应的输入类型
           'text',
