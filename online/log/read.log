@@ -544,3 +544,40 @@
 {"time": "2018-03-31 07:52:54.965264", "user": "guxiang", "ip": "127.0.0.1", "how": "get_Pie_Data", "what": "UDID=3"}
 {"time": "2018-03-31 07:52:55.443060", "user": "guxiang", "ip": "127.0.0.1", "how": "get_Pie_Data", "what": "UDID=4"}
 {"time": "2018-03-31 07:52:56.163801", "user": "guxiang", "ip": "127.0.0.1", "how": "get_Pie_Data", "what": "UDID=5"}
+{"time": "2018-03-31 07:54:11.609406", "user": "guxiang", "ip": "127.0.0.1", "how": "get_Pie_Data", "what": "UDID=6"}
+{"time": "2018-03-31 07:54:12.294487", "user": "guxiang", "ip": "127.0.0.1", "how": "get_Pie_Data", "what": "UDID=5"}
+{"time": "2018-03-31 07:54:17.920157", "user": "guxiang", "ip": "127.0.0.1", "how": "get_Pie_Data", "what": "UDID=10"}
+{"time": "2018-03-31 07:54:25.105450", "user": "guxiang", "ip": "127.0.0.1", "how": "get_Pie_Data", "what": "UDID=4"}
+{"time": "2018-03-31 07:54:28.359178", "user": "guxiang", "ip": "127.0.0.1", "how": "ajax_table_data", "what": "key_table=立项"}
+{"time": "2018-03-31 07:54:28.374332", "user": "guxiang", "ip": "127.0.0.1", "how": "ajax_tree_data", "what": "key_tree=立项"}
+{"time": "2018-03-31 07:54:29.993107", "user": "guxiang", "ip": "127.0.0.1", "how": "get_WritePermissionObj", "what": ""}
+{"time": "2018-03-31 07:54:38.267248", "user": "guxiang", "ip": "127.0.0.1", "how": "ajax_table_data", "what": "key_table=立项"}
+{"time": "2018-03-31 07:54:38.285820", "user": "guxiang", "ip": "127.0.0.1", "how": "ajax_tree_data", "what": "key_tree=立项"}
+{"time": "2018-03-31 07:55:14.957287", "user": "guxiang", "ip": "127.0.0.1", "how": "ajax_table_data", "what": "key_table=单位"}
+{"time": "2018-03-31 07:55:31.239215", "user": "guxiang", "ip": "127.0.0.1", "how": "ajax_table_data", "what": "key_table=立项"}
+{"time": "2018-03-31 07:55:35.412155", "user": "guxiang", "ip": "127.0.0.1", "how": "ajax_treeTable", "what": ""}
+{"time": "2018-03-31 07:55:40.271733", "user": "guxiang", "ip": "127.0.0.1", "how": "get_Pie_Data", "what": "UDID=11"}
+{"time": "2018-03-31 07:55:47.653529", "user": "guxiang", "ip": "127.0.0.1", "how": "ajax_table_data", "what": "key_table=立项"}
+{"time": "2018-03-31 07:55:47.674542", "user": "guxiang", "ip": "127.0.0.1", "how": "ajax_tree_data", "what": "key_tree=立项"}
+{"time": "2018-03-31 07:55:51.219501", "user": "guxiang", "ip": "127.0.0.1", "how": "get_WritePermissionObj", "what": ""}
+{"time": "2018-03-31 07:55:54.367423", "user": "guxiang", "ip": "127.0.0.1", "how": "ajax_table_data", "what": "key_table=立项"}
+{"time": "2018-03-31 07:55:54.377112", "user": "guxiang", "ip": "127.0.0.1", "how": "ajax_tree_data", "what": "key_tree=立项"}
+{"time": "2018-03-31 07:56:14.080644", "user": "guxiang", "ip": "127.0.0.1", "how": "get_WritePermissionObj", "what": ""}
+{"time": "2018-03-31 07:56:30.100883", "user": "guxiang", "ip": "127.0.0.1", "how": "ajax_table_data", "what": "key_table=立项"}
+{"time": "2018-03-31 07:56:33.808488", "user": "guxiang", "ip": "127.0.0.1", "how": "get_WritePermissionObj", "what": ""}
+{"time": "2018-03-31 07:56:35.521585", "user": "guxiang", "ip": "127.0.0.1", "how": "ajax_table_data", "what": "key_table=立项"}
+{"time": "2018-03-31 07:56:35.523815", "user": "guxiang", "ip": "127.0.0.1", "how": "ajax_tree_data", "what": "key_tree=立项"}
+{"time": "2018-03-31 07:56:47.294279", "user": "guxiang", "ip": "127.0.0.1", "how": "ajax_table_data", "what": "key_table=立项"}
+{"time": "2018-03-31 07:56:52.864760", "user": "guxiang", "ip": "127.0.0.1", "how": "ajax_treeTable", "what": ""}
+{"time": "2018-03-31 07:56:54.491373", "user": "guxiang", "ip": "127.0.0.1", "how": "get_Pie_Data", "what": "UDID=4"}
+{"time": "2018-03-31 07:57:02.673919", "user": "guxiang", "ip": "127.0.0.1", "how": "get_Pie_Data", "what": "UDID=11"}
+{"time": "2018-03-31 07:57:06.270089", "user": "guxiang", "ip": "127.0.0.1", "how": "get_Pie_Data", "what": "UDID=10"}
+{"time": "2018-03-31 07:57:38.747875", "user": "guxiang", "ip": "127.0.0.1", "how": "get_Pie_Data", "what": "UDID=11"}
+{"time": "2018-03-31 07:57:39.456625", "user": "guxiang", "ip": "127.0.0.1", "how": "get_Pie_Data", "what": "UDID=5"}
+{"time": "2018-03-31 07:57:40.510660", "user": "guxiang", "ip": "127.0.0.1", "how": "get_Pie_Data", "what": "UDID=10"}
+{"time": "2018-03-31 07:57:47.621241", "user": "guxiang", "ip": "127.0.0.1", "how": "get_Pie_Data", "what": "UDID=10"}
+{"time": "2018-03-31 07:57:51.127849", "user": "guxiang", "ip": "127.0.0.1", "how": "ajax_table_data", "what": "key_table=招标"}
+{"time": "2018-03-31 07:57:51.142778", "user": "guxiang", "ip": "127.0.0.1", "how": "ajax_tree_data", "what": "key_tree=立项"}
+{"time": "2018-03-31 07:57:52.849245", "user": "guxiang", "ip": "127.0.0.1", "how": "ajax_table_data", "what": "key_table=招标, Init_UDID=4"}
+{"time": "2018-03-31 07:57:54.092652", "user": "guxiang", "ip": "127.0.0.1", "how": "ajax_table_data", "what": "key_table=招标, Init_UDID=3"}
+{"time": "2018-03-31 07:57:54.802974", "user": "guxiang", "ip": "127.0.0.1", "how": "ajax_table_data", "what": "key_table=招标, Init_UDID=1"}
