@@ -1,10 +1,10 @@
 CREATE DATABASE  IF NOT EXISTS `erp` /*!40100 DEFAULT CHARACTER SET utf8 */;
 USE `erp`;
--- MySQL dump 10.13  Distrib 5.7.20, for Linux (i686)
+-- MySQL dump 10.13  Distrib 5.7.21, for Linux (i686)
 --
--- Host: 172.17.22.176    Database: erp
+-- Host: localhost    Database: erp
 -- ------------------------------------------------------
--- Server version	5.7.17-log
+-- Server version	5.7.21-0ubuntu0.16.04.1
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -26,11 +26,11 @@ DROP TABLE IF EXISTS `tabel_user`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `tabel_user` (
   `DB_id` bigint(20) NOT NULL AUTO_INCREMENT,
-  `用户名` varchar(255) DEFAULT NULL,
+  `用户名` varchar(255) NOT NULL,
   `密码` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`DB_id`),
   UNIQUE KEY `用户名` (`用户名`)
-) ENGINE=InnoDB AUTO_INCREMENT=27 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -39,7 +39,7 @@ CREATE TABLE `tabel_user` (
 
 LOCK TABLES `tabel_user` WRITE;
 /*!40000 ALTER TABLE `tabel_user` DISABLE KEYS */;
-INSERT INTO `tabel_user` VALUES (1,'guxiang','50daad4cdd16a3440d6a879e074907905e63e58a2fb18d4bdd248cd100701000'),(2,'xufan','96cae35ce8a9b0244178bf28e4966c2ce1b8385723a96a6b838858cdd6ca0a1e'),(3,'renyunfei','fc222136b0c2a064e601b8874ea02188925c8e0e55e8d47324cb341365511403'),(4,'liuxiaoli','96cae35ce8a9b0244178bf28e4966c2ce1b8385723a96a6b838858cdd6ca0a1e'),(5,'lini','6d19ca72de1fe7973e5a763cdbaf47af34674d4f45a8a2cacd881b751d680a4f'),(6,'yuchengnan','96cae35ce8a9b0244178bf28e4966c2ce1b8385723a96a6b838858cdd6ca0a1e'),(7,'lijianle','96cae35ce8a9b0244178bf28e4966c2ce1b8385723a96a6b838858cdd6ca0a1e'),(8,'概算检验','检验'),(11,'hanwenlong','96cae35ce8a9b0244178bf28e4966c2ce1b8385723a96a6b838858cdd6ca0a1e'),(19,'hanjunjiang','96cae35ce8a9b0244178bf28e4966c2ce1b8385723a96a6b838858cdd6ca0a1e'),(20,'wangxifeng','96cae35ce8a9b0244178bf28e4966c2ce1b8385723a96a6b838858cdd6ca0a1e'),(21,'yangxiaoning','96cae35ce8a9b0244178bf28e4966c2ce1b8385723a96a6b838858cdd6ca0a1e'),(22,'gongxiangfei','96cae35ce8a9b0244178bf28e4966c2ce1b8385723a96a6b838858cdd6ca0a1e'),(23,'liye','96cae35ce8a9b0244178bf28e4966c2ce1b8385723a96a6b838858cdd6ca0a1e'),(24,'guest','96cae35ce8a9b0244178bf28e4966c2ce1b8385723a96a6b838858cdd6ca0a1e'),(25,'duyuanyuan','96cae35ce8a9b0244178bf28e4966c2ce1b8385723a96a6b838858cdd6ca0a1e'),(26,'dingjie','96cae35ce8a9b0244178bf28e4966c2ce1b8385723a96a6b838858cdd6ca0a1e');
+INSERT INTO `tabel_user` VALUES (1,'guxiang','50daad4cdd16a3440d6a879e074907905e63e58a2fb18d4bdd248cd100701000'),(2,'pangxiaoyi','bb761721b9de4a0c3a54d774589f022cf21d3e629f462e0639943df89324a620'),(3,'yanglei','9a7fc1bf7205e87ee80a301f28411ed4ae10baf01e3d5d42dadf17a79688cb8a');
 /*!40000 ALTER TABLE `tabel_user` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -52,4 +52,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2018-01-22  9:08:28
+-- Dump completed on 2018-04-01 19:30:31

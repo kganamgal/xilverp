@@ -1,10 +1,10 @@
 CREATE DATABASE  IF NOT EXISTS `erp` /*!40100 DEFAULT CHARACTER SET utf8 */;
 USE `erp`;
--- MySQL dump 10.13  Distrib 5.7.20, for Linux (i686)
+-- MySQL dump 10.13  Distrib 5.7.21, for Linux (i686)
 --
--- Host: 172.17.22.176    Database: erp
+-- Host: localhost    Database: erp
 -- ------------------------------------------------------
--- Server version	5.7.17-log
+-- Server version	5.7.21-0ubuntu0.16.04.1
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -33,12 +33,13 @@ CREATE TABLE `tabel_变更信息` (
   `变更主题` varchar(255) DEFAULT NULL,
   `变更登记日期` date DEFAULT NULL,
   `变更生效日期` date DEFAULT NULL,
-  `变更原因` text,
+  `变更原因` longtext,
   `预估变更额度` decimal(12,2) DEFAULT NULL,
   `变更额度` decimal(12,2) DEFAULT NULL,
-  `变更备注` text,
-  PRIMARY KEY (`变更识别码`)
-) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8;
+  `变更备注` longtext,
+  PRIMARY KEY (`变更识别码`),
+  UNIQUE KEY `变更编号` (`变更编号`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -47,7 +48,6 @@ CREATE TABLE `tabel_变更信息` (
 
 LOCK TABLES `tabel_变更信息` WRITE;
 /*!40000 ALTER TABLE `tabel_变更信息` DISABLE KEYS */;
-INSERT INTO `tabel_变更信息` VALUES (1,47,29,'批价','BWD-PJ-001','防水材料','2017-09-26','2017-07-19','通过询价方式重新确认防水材料（原暂估价项目）价格',NULL,NULL,NULL),(2,47,29,'批价','BWD-PJ-002','电梯','2017-09-26','2017-07-19','通过询价方式认电梯（通过设计变更增加）价格',NULL,NULL,NULL),(3,48,30,'批价','BWG-PJ-001','防水材料','2017-09-26','2017-07-13','通过询价方式重新确认防水材料（原暂估价项目）价格',NULL,NULL,NULL),(4,48,30,'批价','BWG-PJ-002','电梯','2017-09-26','2017-07-19','通过询价方式重新确认电梯（原暂估价项目）价格',6873000.00,NULL,NULL),(5,48,30,'批价','BWG-PJ-003','淤泥','2017-09-26','2017-07-10','淤泥报价',NULL,NULL,NULL),(6,48,30,'批价','BWG-CL-002','毛石','2017-09-26','2017-07-10','毛石（因设计变更增加）',NULL,NULL,NULL),(7,48,30,'批价','BWG-CL-003','商砼','2017-09-26','2017-08-31','商砼（2017年6月按月批价）',531038.00,NULL,NULL),(8,48,30,'批价','BWG-CL-004','商砼','2017-09-26','2017-08-31','商砼（2016年7月份按月批价）',585305.00,NULL,NULL);
 /*!40000 ALTER TABLE `tabel_变更信息` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -60,4 +60,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2018-01-22  9:08:29
+-- Dump completed on 2018-04-01 19:30:31

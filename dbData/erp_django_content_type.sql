@@ -1,10 +1,10 @@
 CREATE DATABASE  IF NOT EXISTS `erp` /*!40100 DEFAULT CHARACTER SET utf8 */;
 USE `erp`;
--- MySQL dump 10.13  Distrib 5.7.20, for Linux (i686)
+-- MySQL dump 10.13  Distrib 5.7.21, for Linux (i686)
 --
--- Host: 172.17.22.176    Database: erp
+-- Host: localhost    Database: erp
 -- ------------------------------------------------------
--- Server version	5.7.17-log
+-- Server version	5.7.21-0ubuntu0.16.04.1
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -39,7 +39,7 @@ CREATE TABLE `django_content_type` (
 
 LOCK TABLES `django_content_type` WRITE;
 /*!40000 ALTER TABLE `django_content_type` DISABLE KEYS */;
-INSERT INTO `django_content_type` VALUES (1,'admin','logentry'),(3,'auth','group'),(4,'auth','permission'),(2,'auth','user'),(5,'contenttypes','contenttype'),(9,'online','table_alteration'),(12,'online','table_bidding'),(8,'online','table_budget'),(14,'online','table_company'),(15,'online','table_contract'),(10,'online','table_initiation'),(13,'online','table_payment'),(7,'online','table_permission'),(11,'online','table_subcontract'),(16,'online','table_user'),(17,'online','table_version'),(6,'sessions','session');
+INSERT INTO `django_content_type` VALUES (1,'admin','logentry'),(3,'auth','group'),(2,'auth','permission'),(4,'auth','user'),(5,'contenttypes','contenttype'),(14,'online','table_alteration'),(12,'online','table_bidding'),(15,'online','table_budget'),(10,'online','table_company'),(13,'online','table_contract'),(11,'online','table_initiation'),(16,'online','table_payment'),(8,'online','table_permission'),(17,'online','table_subcontract'),(9,'online','table_user'),(7,'online','table_version'),(6,'sessions','session');
 /*!40000 ALTER TABLE `django_content_type` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -52,4 +52,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2018-01-22  9:08:27
+-- Dump completed on 2018-04-01 19:30:31

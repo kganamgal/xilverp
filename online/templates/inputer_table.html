@@ -33,10 +33,7 @@
   <div id="id_tool_bar" class="bar">
     <input id="id_conditional_search" type="text" style="" placeholder="条件搜索">
     <div class="btn-group">
-        <button id="id_btn_New" type="button" class="btn btn-default" disabled="disabled">新建</button>
-        <button id="id_btn_View" type="button" class="btn btn-default" disabled="disabled">查看</button>
-        <button type="button" class="btn btn-default" disabled="disabled" disabled="disabled">删除</button>
-        <button id="id_btn_Export" type="button" class="btn btn-default" disabled="disabled">导出</button>
+        <!-- <button id="id_btn_View" type="button" class="btn btn-default">查看</button> -->
     </div>
   </div>
 
@@ -45,7 +42,7 @@
       <div class="col-sm-10 column" style="padding: 0px;">
         <!-- 表格部分 -->
         <div class="table-responsive" style="cursor: default;">
-          <table id="id_bootstrap_table" class="table table-condensed"></table>
+          <table id="id_bootstrap_table" class="table table-condensed" style="white-space: nowrap;overflow: hidden;"></table>
         </div>
       </div>
       <div class="col-sm-2 column" style="padding: 0px;">
@@ -263,6 +260,25 @@
             searchable: true,
             searchFormatter: false,
             width: '30px',
+          })
+        } else if (types[i] === '文本型') {
+          columns.push({
+            field: heads[i],
+            title: heads[i],
+            sortable: true,
+            halign: 'center',
+            align: 'center',
+            valign: 'middle',
+            searchable: true,
+            searchFormatter: false,
+            formatter : function(value, row, index){
+              var div = "<div style='width: 300px;overflow: hidden;'>"+value+"</div>";
+              if (value) {
+                return div;
+              } else {
+                return null;
+              };
+            }
           })
         } else {
           columns.push({

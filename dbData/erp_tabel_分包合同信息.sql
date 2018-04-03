@@ -1,10 +1,10 @@
 CREATE DATABASE  IF NOT EXISTS `erp` /*!40100 DEFAULT CHARACTER SET utf8 */;
 USE `erp`;
--- MySQL dump 10.13  Distrib 5.7.20, for Linux (i686)
+-- MySQL dump 10.13  Distrib 5.7.21, for Linux (i686)
 --
--- Host: 172.17.22.176    Database: erp
+-- Host: localhost    Database: erp
 -- ------------------------------------------------------
--- Server version	5.7.17-log
+-- Server version	5.7.21-0ubuntu0.16.04.1
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -40,9 +40,10 @@ CREATE TABLE `tabel_分包合同信息` (
   `分包合同值_签订时` decimal(12,2) DEFAULT NULL,
   `分包合同值_最新值` decimal(12,2) DEFAULT NULL,
   `分包合同值_最终值` decimal(12,2) DEFAULT NULL,
-  `分包合同备注` text,
-  PRIMARY KEY (`分包合同识别码`)
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8;
+  `分包合同备注` longtext,
+  PRIMARY KEY (`分包合同识别码`),
+  UNIQUE KEY `分包合同编号` (`分包合同编号`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -51,7 +52,6 @@ CREATE TABLE `tabel_分包合同信息` (
 
 LOCK TABLES `tabel_分包合同信息` WRITE;
 /*!40000 ALTER TABLE `tabel_分包合同信息` DISABLE KEYS */;
-INSERT INTO `tabel_分包合同信息` VALUES (3,59,25,NULL,'设计合作协议','北王安置房人防设计','人防设计',28,43,NULL,NULL,NULL,1355615.00,1355615.00,NULL,NULL),(4,59,25,NULL,'设计合作协议','北王安置房道路、排水设计','市政设计',28,44,NULL,NULL,NULL,195104.00,195104.00,NULL,NULL),(5,59,25,NULL,'设计合作协议','北王安置房基坑支护设计','基坑支护设计',28,45,NULL,NULL,NULL,48391.00,48391.00,NULL,NULL);
 /*!40000 ALTER TABLE `tabel_分包合同信息` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -64,4 +64,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2018-01-22  9:08:29
+-- Dump completed on 2018-04-01 19:30:31
