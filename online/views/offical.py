@@ -568,7 +568,7 @@ def ajax_table_data(request):
                          'key_table={}, Init_UDID={}'.format(key_table, Init_UDID))
         # 取得该立项下全部后代节点
         if key_table == '预算':
-            grandchildern_ids = get_All_Budget_Grandchildren_UDID(Init_UDID)
+            grandchildern_ids = new_get_All_Budget_Grandchildren_UDID(Init_UDID)
             t_rows = dict_API[key_table](
                 'where 预算识别码 in %s', [grandchildern_ids + [Init_UDID]])
             try:
@@ -577,7 +577,7 @@ def ajax_table_data(request):
             except:
                 t_UDID = None
         else:
-            grandchildern_ids = get_All_Grandchildren_UDID(Init_UDID)
+            grandchildern_ids = new_get_All_Grandchildren_UDID(Init_UDID)
             t_rows = dict_API[key_table](
                 'where 立项识别码 in %s', [grandchildern_ids + [Init_UDID]])
             try:

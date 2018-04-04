@@ -2148,14 +2148,13 @@ def save_For_Initiation(checkEstimate=True, **data):
             # 项目概算应>=已付款，项目概算应>=已分配概算
             UDIDs = [UDID] + get_All_Grandchildren_UDID(UDID)
             orm_payment = table_Payment.objects.filter(立项识别码__in=UDIDs)
-            payed = float(sum([x.get('本次付款额') for x in orm_payment.values()]))
+            payed = float(sum([x.get('本次付款额') for x in orm_payment.values()]) or 0)
             estimate = float(data.get('项目概算') or 0)
             if estimate < payed:
                 return (0, '<项目概算>(%f)过低，请调整为不低于<概算已付款额>(%f)' % (estimate, payed))
             orm_init = table_Initiation.objects.filter(
                 父项立项识别码=UDID).values()
-            distributed_estimate = float(
-                sum([x.get('项目概算') for x in orm_init]))
+            distributed_estimate = float(sum([(x.get('项目概算') or 0) for x in orm_init]))
             if estimate < distributed_estimate:
                 return (0, '<项目概算>(%f)过低，请调整为不低于<已分配概算>(%f)' % (estimate, distributed_estimate))
             # 父项存在时，项目概算应<= 项目概算上限
@@ -2163,10 +2162,8 @@ def save_For_Initiation(checkEstimate=True, **data):
             if parentUDID > 0:
                 orm_init = table_Initiation.objects.filter(
                     父项立项识别码=parentUDID).exclude(立项识别码=UDID).values()
-                brother_estimate = float(
-                    sum([x.get('项目概算') for x in orm_init]))
-                parent_estimate = float(table_Initiation.objects.filter(
-                    立项识别码=parentUDID).values()[0].get('项目概算'))
+                brother_estimate = float(sum([(x.get('项目概算') or 0) for x in orm_init]) or 0)
+                parent_estimate = float(table_Initiation.objects.filter(立项识别码=parentUDID).values()[0].get('项目概算') or 0)
                 limit_estimate = parent_estimate - brother_estimate
                 estimate = float(data.get('项目概算') or 0)
                 if estimate > limit_estimate:
