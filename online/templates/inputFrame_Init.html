@@ -765,7 +765,7 @@
         $('#id_btn_Attach').removeAttr('disabled');
         $(document).on('click', '#id_btn_Attach', function() {
           child_data['key_frame'] = key_frame;
-          var UDID = $('input')[0].value;
+          var UDID = $('#id_立项识别码')[0].value;
           child_data['UDID'] = UDID;
           var key_url = dict_Chn_Eng[child_data['key_frame']];
           var content_url = "{% url 'attachFrame' 'ewhuvlk' %}"
